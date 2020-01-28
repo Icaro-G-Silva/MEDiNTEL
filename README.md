@@ -1,4 +1,4 @@
-# <img src="./logo.png" width="120" align="left"> MEDiNTEL
+# <img src="./Logo.png" width="100" align="left"> MEDiNTEL
 
 > A Smarter way to analyze your blood.
 
