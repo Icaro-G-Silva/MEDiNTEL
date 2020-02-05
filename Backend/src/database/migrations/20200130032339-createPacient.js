@@ -24,6 +24,13 @@ module.exports = {
             }
           }
         },
+        doctorId: { //Coluna do Relacionamento com o `Doctors`
+          type: Sequelize.INTEGER,
+          allowNull: true,
+          references: {model: 'Doctors', key: 'id'},
+          onUpdate: 'CASCADE',
+          onDelete: 'SET NULL'
+        },
         name: {
           type: Sequelize.STRING(80),
           allowNull: false,

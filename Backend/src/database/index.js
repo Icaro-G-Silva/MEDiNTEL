@@ -8,4 +8,7 @@ const connection = new Sequelize(dbConfig)
 Pacient.init(connection)
 Doctor.init(connection)
 
+Pacient.associate(connection.models)
+Doctor.associate(connection.models)
+
 module.exports = connection

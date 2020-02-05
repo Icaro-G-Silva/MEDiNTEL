@@ -16,6 +16,9 @@ class Doctor extends Model {
             sequelize
         })
     }
+    static associate(models) {
+        this.hasMany(models.Pacient, {foreignKey: 'doctorId', as: 'pacients'})
+    }
 }
 
 module.exports = Doctor
