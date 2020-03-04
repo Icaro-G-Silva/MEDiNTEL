@@ -19,6 +19,9 @@ module.exports = {
     async store(req, res) {
         const { crm, name, surname, idDocument, birth, sex, login, password, accessLevel } = req.body
 
+        const doctorExistence = await hasDoctor(req.params.id)
+        if(doctorExistence) return res.status(400).json({error: 'Doctor is already registered'})
+
         if(!validateDocument(idDocument)) return res.status(400).json({error: 'Document invalid'})
 
         const doctor = await Doctor.create({
@@ -39,7 +42,8 @@ module.exports = {
     async update(req, res) {
         const { crm, name, surname, idDocument, birth, sex, login, password, accessLevel } = req.body
 
-        if(!hasDoctor(id)) res.status(400).json({error: 'Doctor not found'})
+        const doctorExistence = await hasDoctor(req.params.id)
+        if(!doctorExistence) return res.status(400).json({error: 'Doctor not found'})
 
         if(!validateDocument(idDocument)) return res.status(400).json({error: 'Document invalid'})
 
@@ -61,7 +65,9 @@ module.exports = {
         return res.status(200).json({ message: 'Updated Successfully' })
     },
     async delete(req, res) {
-        if(!hasDoctor(req.params.id)) return res.status(400).json({error: 'Doctor not found'})
+
+        const doctorExistence = await hasDoctor(req.params.id)
+        if(!doctorExistence) return res.status(400).json({error: 'Doctor not found'})
 
         const doctor = await Doctor.destroy({where:{id: req.params.id}}).catch((error)=>{
             return res.status(400).json({ error })

@@ -21,9 +21,13 @@ module.exports = {
         const { id } = req.body //Talvez mude!!!
         const { rp, name, surname, idDocument, birth, sex, login, password, accessLevel } = req.body
 
+        const pacientExistence = await hasPacient(req.params.id)
+        if(pacientExistence) return res.status(400).json({error: 'Pacient is already Registered'})
+
         if(!validateDocument(idDocument)) return res.status(400).json({error: 'Document invalid'})
 
-        if(!hasDoctor(id)) return res.status(400).json({error: 'Doctor not found'})
+        const doctorExistence = await hasDoctor(id)
+        if(!doctorExistence) return res.status(400).json({error: 'Doctor not found'})
 
         const pacient = await Pacient.create({
             rp,
@@ -44,11 +48,13 @@ module.exports = {
     async update(req, res) {
         const { rp, name, surname, idDocument, birth, sex, login, password, accessLevel, id } = req.body
 
-        if(!hasPacient(req.params.id)) return res.status(400).json({error: 'Pacient not found'})
+        const pacientExistence = await hasPacient(req.params.id)
+        if(!pacientExistence) return res.status(400).json({error: 'Pacient not found'})
+
         if(!validateDocument(idDocument)) return res.status(400).json({error: 'Document invalid'})
 
-        const relatedDoctor = await Doctor.findAll({ where: { id } })
-        if(!relatedDoctor) return res.status(400).json({error: 'Doctor not found'})
+        const doctorExistence = await hasDoctor(id)
+        if(!doctorExistence) return res.status(400).json({error: 'Doctor not found'})
 
         const pacient = await Pacient.update({
             rp,
@@ -69,7 +75,9 @@ module.exports = {
         return res.status(200).json({ message: 'Updated Successfully' })
     },
     async delete(req, res) {
-        if(!hasPacient(req.params.id)) return res.status(400).json({error: 'Pacient not found'})
+
+        const pacientExistence = await hasPacient(req.params.id)
+        if(!pacientExistence) return res.status(400).json({error: 'Pacient not found'})
 
         const pacient = await Pacient.destroy({where:{id: req.params.id}}).catch((error)=>{
             return res.status(400).json({ error })
