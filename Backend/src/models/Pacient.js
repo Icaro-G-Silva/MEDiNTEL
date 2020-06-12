@@ -3,6 +3,10 @@ const { Model, DataTypes } = require('sequelize')
 class Pacient extends Model {
     static init(sequelize) {
         super.init({
+            id: {
+                type: DataTypes.STRING(15),
+                primaryKey: true
+            },
             rp: DataTypes.INTEGER,
             name: DataTypes.STRING(80),
             surname: DataTypes.STRING(50),

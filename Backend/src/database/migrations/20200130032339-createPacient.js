@@ -4,14 +4,13 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
       return queryInterface.createTable('Pacients', {
         id: {
-          type: Sequelize.INTEGER,
-          autoIncrement: true,
+          type: Sequelize.STRING(15),
+          primaryKey: true,
           allowNull: false,
           unique: true
         },
         rp: { //Registro do Paciente
           type: Sequelize.INTEGER,
-          primaryKey: true,
           autoIncrement: false,
           allowNull: false,
           unique: true,
@@ -25,7 +24,7 @@ module.exports = {
           }
         },
         doctorId: { //Coluna do Relacionamento com o `Doctors`
-          type: Sequelize.INTEGER,
+          type: Sequelize.STRING(15),
           allowNull: true,
           references: {model: 'Doctors', key: 'id'},
           onUpdate: 'CASCADE',

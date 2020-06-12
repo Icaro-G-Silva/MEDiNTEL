@@ -3,7 +3,11 @@ const { Model, DataTypes } = require('sequelize')
 class Doctor extends Model {
     static init(sequelize) {
         super.init({
-            crm: DataTypes.INTEGER,
+            id: {
+                type: DataTypes.STRING(15),
+                primaryKey: true
+            },
+            crm: DataTypes.STRING(11),
             name: DataTypes.STRING(80),
             surname: DataTypes.STRING(50),
             idDocument: DataTypes.STRING(15),

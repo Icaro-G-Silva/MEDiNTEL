@@ -4,15 +4,13 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
       return queryInterface.createTable('Doctors', {
         id: {
-          type: Sequelize.INTEGER,
-          autoIncrement: true,
+          type: Sequelize.STRING(15),
+          primaryKey: true,
           allowNull: false,
           unique: true
         },
         crm: { //Registro do Médico
-          type: Sequelize.INTEGER,
-          primaryKey: true,
-          autoIncrement: false,
+          type: Sequelize.STRING(11),
           allowNull: false,
           unique: true,
           validate: {
@@ -20,8 +18,8 @@ module.exports = {
               msg: "This field cannot be empty"
             },
             len: {
-              args: [4, 8],
-              msg: "This field needs at least 4 and at max 8 characters"
+              args: [10, 11],
+              msg: "This field needs at least 10 and at max 11 characters"
             }
           }
         },
