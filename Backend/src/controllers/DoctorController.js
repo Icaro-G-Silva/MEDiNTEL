@@ -9,13 +9,18 @@ module.exports = {
     async index(req, res) {
         const doctor = await Doctor.findAll({
             include: { association: 'pacients' }
+        }).catch(error => {
+            return res.status(400).json({ error })
         })
         return res.status(200).json(doctor)
     },
     async indexPacient(req, res) {
+        if(! await hasDoctor(null, req.params.crm)) return res.status(400).json({"Error": "Doctor not found"})
         const id = await getDoctorId(req.params.crm)
         const pacients = await Pacient.findAll({
             where: { doctorId: id }
+        }).catch(error => {
+            return res.status(400).json({ error })
         })
         return res.status(200).json(pacients)
     },
@@ -24,9 +29,7 @@ module.exports = {
 
         const crmSliced = crm.replace('/', '')
 
-        const doctorExistence = await hasDoctor(null, crmSliced)
-        if(doctorExistence) return res.status(400).json({error: 'Doctor is already registered'})
-
+        if(await hasDoctor(null, crmSliced)) return res.status(400).json({error: 'Doctor is already registered'})
         if(!validateDocument(idDocument)) return res.status(400).json({error: 'Document invalid'})
 
         const id = await createDoctorId()
@@ -43,7 +46,7 @@ module.exports = {
             login,
             password: passwordHashed,
             accessLevel
-        }).catch((error)=>{
+        }).catch(error =>{
             return res.status(400).json({ error })
         })
         return res.status(200).json(doctor)
@@ -53,15 +56,13 @@ module.exports = {
 
         const crmSliced = crm.replace('/', '')
 
+        if(!await hasDoctor(null, req.params.crm)) return res.status(400).json({error: 'Doctor not found'})
         const id = await getDoctorId(req.params.crm)
-        const doctorExistence = await hasDoctor(id)
-        if(!doctorExistence) return res.status(400).json({error: 'Doctor not found'})
 
         if(!validateDocument(idDocument)) return res.status(400).json({error: 'Document invalid'})
 
         if(req.params.crm != crmSliced) {
-            const doctorExistence = await hasDoctor(null, crmSliced)
-            if(doctorExistence) return res.status(400).json({error: 'Doctor is already registered'})
+            if(await hasDoctor(null, crmSliced)) return res.status(400).json({error: 'Doctor is already registered'})
         }
 
         const passwordHashed = await createHash(password)
@@ -78,17 +79,16 @@ module.exports = {
             accessLevel
         }, {
             where: {id}
-        }).catch((error)=>{
+        }).catch(error =>{
             return res.status(400).json({ error })
         })
         return res.status(200).json({ message: 'Updated Successfully' })
     },
     async delete(req, res) {
+        if(!await hasDoctor(null, req.params.crm)) return res.status(400).json({error: 'Doctor not found'})
         const id = await getDoctorId(req.params.crm)
-        const doctorExistence = await hasDoctor(id)
-        if(!doctorExistence) return res.status(400).json({error: 'Doctor not found'})
 
-        const doctor = await Doctor.destroy({where:{id}}).catch((error)=>{
+        const doctor = await Doctor.destroy({where:{id}}).catch(error =>{
             return res.status(400).json({ error })
         })
         return res.status(200).json({ message: 'Deleted Successfully' })
