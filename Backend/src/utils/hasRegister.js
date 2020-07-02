@@ -10,6 +10,7 @@ module.exports = {
             var relatedDoctor = await Doctor.findOne({ where: { id } })
         }
         if(!relatedDoctor || relatedDoctor == null) return false
+        else if(id === false || crm === false) return false
         else return true
         
     },
@@ -21,6 +22,7 @@ module.exports = {
             var relatedPacient = await Pacient.findOne({ where: { id } })
         }
         if(!relatedPacient || relatedPacient == null) return false
+        else if(id === false || rp === false) return false
         else return true
     }
 }

@@ -13,9 +13,21 @@ module.exports = {
         })
         return res.status(200).json(pacients)
     },
+    async indexSpecific(req, res) {
+        const id = await getPacientId(parseInt(req.params.rp))
+        if(!await hasPacient(id)) return res.status(400).json({error: 'Pacient not found'})
+
+        const pacient = await Pacient.findByPk(id, {
+            include: { association: 'doctor' }
+        }).catch(error => {
+            return res.status(400).json({ error })
+        })
+        if(pacient) return res.status(200).json(pacient)
+        else return res.status(400).json({error: 'Pacient not found'})
+    },
     async indexDoctor(req, res) {
         const id = await getPacientId(parseInt(req.params.rp))
-        if(!await hasPacient(id)) res.status(400).json({error: 'Pacient not found'})
+        if(!await hasPacient(id)) return res.status(400).json({error: 'Pacient not found'})
 
         const pacients = await Pacient.findByPk(id, {
             include: { association: 'doctor' }
