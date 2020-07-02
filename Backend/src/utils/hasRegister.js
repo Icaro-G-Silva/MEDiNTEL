@@ -1,4 +1,4 @@
-const Pacient = require('../models/Pacient')
+const Patient = require('../models/Patient')
 const Doctor = require('../models/Doctor')
 
 module.exports = {
@@ -14,14 +14,14 @@ module.exports = {
         else return true
         
     },
-    async hasPacient(id = null, rp = null) {
+    async hasPatient(id = null, rp = null) {
         if(rp !== null) {
-            var relatedPacient = await Pacient.findOne({ where: { rp } })
+            var relatedPatient = await Patient.findOne({ where: { rp } })
         }
         if(id !== null) {
-            var relatedPacient = await Pacient.findOne({ where: { id } })
+            var relatedPatient = await Patient.findOne({ where: { id } })
         }
-        if(!relatedPacient || relatedPacient == null) return false
+        if(!relatedPatient || relatedPatient == null) return false
         else if(id === false || rp === false) return false
         else return true
     }

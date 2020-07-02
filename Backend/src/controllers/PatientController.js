@@ -1,41 +1,41 @@
-const Pacient = require('../models/Pacient')
+const Patient = require('../models/Patient')
 const { validateDocument } = require('../utils/verifyCPF')
-const { hasDoctor, hasPacient } = require('../utils/hasRegister')
-const { getDoctorId, getPacientId } = require('../utils/getIds')
-const { createPacientId, createHash } = require('../utils/createHashes')
+const { hasDoctor, hasPatient } = require('../utils/hasRegister')
+const { getDoctorId, getPatientId } = require('../utils/getIds')
+const { createPatientId, createHash } = require('../utils/createHashes')
 
 module.exports = {
     async index(req, res) {
-        const pacients = await Pacient.findAll({
+        const patients = await Patient.findAll({
             include: { association: 'doctor' }
         }).catch(error => {
             return res.status(400).json({ error })
         })
-        return res.status(200).json(pacients)
+        return res.status(200).json(patients)
     },
     async indexSpecific(req, res) {
-        const id = await getPacientId(parseInt(req.params.rp))
-        if(!await hasPacient(id)) return res.status(400).json({error: 'Pacient not found'})
+        const id = await getPatientId(parseInt(req.params.rp))
+        if(!await hasPacient(id)) return res.status(400).json({error: 'Patient not found'})
 
-        const pacient = await Pacient.findByPk(id, {
+        const patient = await Patient.findByPk(id, {
             include: { association: 'doctor' }
         }).catch(error => {
             return res.status(400).json({ error })
         })
-        if(pacient) return res.status(200).json(pacient)
-        else return res.status(400).json({error: 'Pacient not found'})
+        if(patient) return res.status(200).json(patient)
+        else return res.status(400).json({error: 'Patient not found'})
     },
     async indexDoctor(req, res) {
-        const id = await getPacientId(parseInt(req.params.rp))
-        if(!await hasPacient(id)) return res.status(400).json({error: 'Pacient not found'})
+        const id = await getPatientId(parseInt(req.params.rp))
+        if(!await hasPatient(id)) return res.status(400).json({error: 'Patient not found'})
 
-        const pacients = await Pacient.findByPk(id, {
+        const patients = await Patient.findByPk(id, {
             include: { association: 'doctor' }
         }).catch(error => {
             return res.status(400).json({ error })
         })
-        if(pacients) return res.status(200).json(pacients.doctor)
-        else return res.status(400).json({error: 'Pacient not found'})
+        if(patients) return res.status(200).json(patients.doctor)
+        else return res.status(400).json({error: 'Patient not found'})
     },
     async store(req, res) {
         const { doctorCRM } = req.body
@@ -43,17 +43,17 @@ module.exports = {
 
         const crmSliced = doctorCRM.replace('/', '')
         
-        if(await hasPacient(null, rp)) return res.status(400).json({error: 'Pacient is already Registered'})
+        if(await hasPatient(null, rp)) return res.status(400).json({error: 'Patient is already Registered'})
         if(!validateDocument(idDocument)) return res.status(400).json({error: 'Document invalid'})
 
         const doctorId = await getDoctorId(crmSliced)
         if(!doctorId) return res.status(400).json({error: "Doctor's crm not found"})
         if(!await hasDoctor(doctorId)) return res.status(400).json({error: 'Doctor not found'})
 
-        const id = await createPacientId()
+        const id = await createPatientId()
         const passwordHashed = await createHash(password)
         
-        const pacient = await Pacient.create({
+        const patient = await Patient.create({
             id,
             rp,
             name,
@@ -68,15 +68,15 @@ module.exports = {
         }).catch(error =>{
             return res.status(400).json({ error })
         })
-        return res.status(200).json(pacient)
+        return res.status(200).json(patient)
     },
     async update(req, res) {
         const { rp, name, surname, idDocument, birth, sex, login, password, accessLevel, doctorCRM } = req.body
 
         const crmSliced = doctorCRM.replace('/', '')
 
-        const id = await getPacientId(parseInt(req.params.rp))
-        if(!await hasPacient(id)) return res.status(400).json({error: 'Pacient not found'})
+        const id = await getPatientId(parseInt(req.params.rp))
+        if(!await hasPatient(id)) return res.status(400).json({error: 'Patient not found'})
         if(!validateDocument(idDocument)) return res.status(400).json({error: 'Document invalid'})
 
         const doctorId = await getDoctorId(crmSliced)
@@ -85,7 +85,7 @@ module.exports = {
 
         const passwordHashed = await createHash(password)
 
-        const pacient = await Pacient.update({
+        const patient = await Patient.update({
             rp,
             name,
             surname,
@@ -104,10 +104,10 @@ module.exports = {
         return res.status(200).json({ message: 'Updated Successfully' })
     },
     async delete(req, res) {
-        const id = await getPacientId(parseInt(req.params.rp))
-        if(!await hasPacient(id)) return res.status(400).json({error: 'Pacient not found'})
+        const id = await getPatientId(parseInt(req.params.rp))
+        if(!await hasPatient(id)) return res.status(400).json({error: 'Patient not found'})
 
-        const pacient = await Pacient.destroy({where:{id}}).catch(error =>{
+        const patient = await Patient.destroy({where:{id}}).catch(error =>{
             return res.status(400).json({ error })
         })
         return res.status(200).json({ message: 'Deleted Successfully' })

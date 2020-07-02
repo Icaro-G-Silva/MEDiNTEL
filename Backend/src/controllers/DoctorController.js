@@ -1,4 +1,4 @@
-const Pacient = require('../models/Pacient')
+const Patient = require('../models/Patient')
 const Doctor = require('../models/Doctor')
 const { validateDocument } = require('../utils/verifyCPF')
 const { hasDoctor } = require('../utils/hasRegister')
@@ -8,7 +8,7 @@ const { getDoctorId } = require('../utils/getIds')
 module.exports = {
     async index(req, res) {
         const doctor = await Doctor.findAll({
-            include: { association: 'pacients' }
+            include: { association: 'patients' }
         }).catch(error => {
             return res.status(400).json({ error })
         })
@@ -18,21 +18,21 @@ module.exports = {
         if(! await hasDoctor(null, req.params.crm)) return res.status(400).json({"Error": "Doctor not found"})
         const id = await getDoctorId(req.params.crm)
         const doctor = await Doctor.findByPk(id, {
-            include: { association: 'pacients' }
+            include: { association: 'patients' }
         }).catch(error => {
             return res.status(400).json({ error })
         })
         return res.status(200).json(doctor)
     },
-    async indexPacient(req, res) {
+    async indexPatient(req, res) {
         if(! await hasDoctor(null, req.params.crm)) return res.status(400).json({"Error": "Doctor not found"})
         const id = await getDoctorId(req.params.crm)
-        const pacients = await Pacient.findAll({
+        const patients = await Patient.findAll({
             where: { doctorId: id }
         }).catch(error => {
             return res.status(400).json({ error })
         })
-        return res.status(200).json(pacients)
+        return res.status(200).json(patients)
     },
     async store(req, res) {
         const { crm, name, surname, idDocument, birth, sex, login, password, accessLevel } = req.body

@@ -1,6 +1,6 @@
 const { Model, DataTypes } = require('sequelize')
 
-class Pacient extends Model {
+class Patient extends Model {
     static init(sequelize) {
         super.init({
             id: {
@@ -22,7 +22,8 @@ class Pacient extends Model {
     }
     static associate(models) {
         this.belongsTo(models.Doctor, {foreignKey: 'doctorId', as: 'doctor'})
+        this.hasMany(models.BloodCount, {foreignKey: 'patientId', as: 'bloodCounts'})
     }
 }
 
-module.exports = Pacient
+module.exports = Patient

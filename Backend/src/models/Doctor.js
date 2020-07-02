@@ -21,7 +21,7 @@ class Doctor extends Model {
         })
     }
     static associate(models) {
-        this.hasMany(models.Pacient, {foreignKey: 'doctorId', as: 'pacients'})
+        this.hasMany(models.Patient, {foreignKey: 'doctorId', as: 'patients'})
     }
 }
 

@@ -1,7 +1,7 @@
 const mysql = require('mysql2/promise');
 const fs = require('fs');
 const path = require('path');
-const {doctorTable, pacientTable} = require('../../../configs/externalDatabase');
+const {doctorTable, patientTable} = require('../../../configs/externalDatabase');
 const configPath = path.resolve(__dirname, '../', '../', '../', 'configs', 'database.js');
 
 module.exports ={
@@ -31,7 +31,7 @@ module.exports ={
         });
 
         await connection.query(`${doctorTable}`);
-        await connection.query(`${pacientTable}`);
+        await connection.query(`${patientTable}`);
 
         connection.close();
     }

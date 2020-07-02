@@ -16,7 +16,7 @@ module.exports = {
         UNIQUE KEY(id)
     );`,
     
-    pacientTable: `CREATE TABLE IF NOT EXISTS Pacients(
+    patientTable: `CREATE TABLE IF NOT EXISTS Pacients(
         id INTEGER NOT NULL AUTO_INCREMENT,
         rp INTEGER NOT NULL,
         doctorId INTEGER,

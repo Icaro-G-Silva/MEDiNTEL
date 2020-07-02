@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-      return queryInterface.createTable('Pacients', {
+      return queryInterface.createTable('Patients', {
         id: {
           type: Sequelize.STRING(15),
           primaryKey: true,
@@ -114,7 +114,7 @@ module.exports = {
             }
           }
         },
-        accessLevel: { //Nível de Acesso: "Doctor", "Pacient"
+        accessLevel: { //Nível de Acesso: "Doctor", "Patient"
           type: Sequelize.STRING(20),
           allowNull: false,
           validate: {
@@ -139,6 +139,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-      return queryInterface.dropTable('Pacients');
+      return queryInterface.dropTable('Patients');
   }
 };
