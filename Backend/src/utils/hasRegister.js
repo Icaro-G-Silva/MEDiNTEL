@@ -1,5 +1,9 @@
 const Patient = require('../models/Patient')
 const Doctor = require('../models/Doctor')
+const BloodCount = require('../models/BloodCount')
+const Eritograma = require('../models/Eritograma')
+const Leucograma = require('../models/Leucograma')
+const Plaquetario = require('../models/Plaquetario')
 
 module.exports = {
     async hasDoctor(id = null, crm = null) {
@@ -23,6 +27,50 @@ module.exports = {
         }
         if(!relatedPatient || relatedPatient == null) return false
         else if(id === false || rp === false) return false
+        else return true
+    },
+    async hasBloodCount(id = null, requestNumber = null) {
+        if(requestNumber !== null) {
+            var relatedBloodCount = await BloodCount.findOne({ where: { requestNumber } })
+        }
+        if(id !== null) {
+            var relatedBloodCount = await BloodCount.findOne({ where: { id } })
+        }
+        if(!relatedBloodCount || relatedBloodCount == null) return false
+        else if(id === false || requestNumber === false) return false
+        else return true
+    },
+    async hasEritograma(id = null, bloodCountId = null) {
+        if(bloodCountId !== null) {
+            var relatedEritograma = await Eritograma.findOne({ where: { bloodCountId } })
+        }
+        if(id !== null) {
+            var relatedEritograma = await Eritograma.findOne({ where: { id } })
+        }
+        if(!relatedEritograma || relatedEritograma == null) return false
+        else if(id === false || bloodCountId === false) return false
+        else return true
+    },
+    async hasLeucograma(id = null, bloodCountId = null) {
+        if(bloodCountId !== null) {
+            var relatedLeucograma = await Leucograma.findOne({ where: { bloodCountId } })
+        }
+        if(id !== null) {
+            var relatedLeucograma = await Leucograma.findOne({ where: { id } })
+        }
+        if(!relatedLeucograma || relatedLeucograma == null) return false
+        else if(id === false || bloodCountId === false) return false
+        else return true
+    },
+    async hasPlaquetario(id = null, bloodCountId = null) {
+        if(bloodCountId !== null) {
+            var relatedPlaquetario = await Plaquetario.findOne({ where: { bloodCountId } })
+        }
+        if(id !== null) {
+            var relatedPlaquetario = await Plaquetario.findOne({ where: { id } })
+        }
+        if(!relatedPlaquetario || relatedPlaquetario == null) return false
+        else if(id === false || bloodCountId === false) return false
         else return true
     }
 }

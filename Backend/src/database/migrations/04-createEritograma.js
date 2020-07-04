@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-      return queryInterface.createTable('Eritograma', {
+      return queryInterface.createTable('Eritogramas', {
         id: {
           type: Sequelize.STRING(15),
           primaryKey: true,
@@ -12,7 +12,7 @@ module.exports = {
         bloodCountId: { //Associate with `BloodCount`
           type: Sequelize.STRING(15),
           allowNull: true,
-          references: {model: 'BloodCount', key: 'id'},
+          references: {model: 'BloodCounts', key: 'id'},
           onUpdate: 'CASCADE',
           onDelete: 'CASCADE'
         },
@@ -111,6 +111,6 @@ module.exports = {
       });
   },
   down: (queryInterface, Sequelize) => {
-      return queryInterface.dropTable('Eritograma');
+      return queryInterface.dropTable('Eritogramas');
   }
 };

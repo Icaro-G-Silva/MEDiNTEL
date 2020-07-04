@@ -1,4 +1,4 @@
-const {hasDoctor, hasPacient} = require('./hasRegister')
+const {hasDoctor, hasPatient, hasBloodCount, hasEritograma, hasLeucograma, hasPlaquetario} = require('./hasRegister')
 const crypto = require('crypto')
 
 //Begin Passwd
@@ -43,13 +43,49 @@ async function createDoctorId() {
     return id
 }
 
-async function createPacientId() {
+async function createPatientId() {
     var exist = true
     do {
         var id = crypto.randomBytes(12).toString('hex').slice(0, 12)
-        if(!await hasPacient(id)) exist = false
+        if(!await hasPatient(id)) exist = false
     } while(exist)
     return id
+}
+
+async function createBloodCountId() {
+  var exist = true
+  do {
+      var id = crypto.randomBytes(12).toString('hex').slice(0, 12)
+      if(!await hasBloodCount(id)) exist = false
+  } while(exist)
+  return id
+}
+
+async function createEritogramaId() {
+  var exist = true
+  do {
+      var id = crypto.randomBytes(12).toString('hex').slice(0, 12)
+      if(!await hasEritograma(id)) exist = false
+  } while(exist)
+  return id
+}
+
+async function createLeucogramaId() {
+  var exist = true
+  do {
+      var id = crypto.randomBytes(12).toString('hex').slice(0, 12)
+      if(!await hasLeucograma(id)) exist = false
+  } while(exist)
+  return id
+}
+
+async function createPlaquetarioId() {
+  var exist = true
+  do {
+      var id = crypto.randomBytes(12).toString('hex').slice(0, 12)
+      if(!await hasPlaquetario(id)) exist = false
+  } while(exist)
+  return id
 }
 
 //End ID
@@ -58,5 +94,9 @@ module.exports = {
     createHash,
     validateHash,
     createDoctorId,
-    createPacientId
+    createPatientId,
+    createBloodCountId,
+    createEritogramaId,
+    createLeucogramaId,
+    createPlaquetarioId
 }

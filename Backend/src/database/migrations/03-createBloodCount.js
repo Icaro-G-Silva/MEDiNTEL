@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-      return queryInterface.createTable('BloodCount', {
+      return queryInterface.createTable('BloodCounts', {
         id: {
           type: Sequelize.STRING(15),
           primaryKey: true,
@@ -50,7 +50,6 @@ module.exports = {
         origin: {
           type: Sequelize.STRING(80),
           allowNull: false,
-          unique: true,
           validate: {
             isEmpty: {
               msg: "This field cannot be empty"
@@ -171,6 +170,6 @@ module.exports = {
       });
   },
   down: (queryInterface, Sequelize) => {
-      return queryInterface.dropTable('BloodCount');
+      return queryInterface.dropTable('BloodCounts');
   }
 };
