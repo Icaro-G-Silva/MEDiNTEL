@@ -1,5 +1,6 @@
 const Patient = require('../models/Patient')
 const Doctor = require('../models/Doctor')
+const BloodCount = require('../models/BloodCount')
 const { validateDocument } = require('../utils/verifyCPF')
 const { hasDoctor } = require('../utils/hasRegister')
 const {createDoctorId, createHash} = require('../utils/createHashes')
@@ -102,5 +103,14 @@ module.exports = {
             return res.status(400).json({ error })
         })
         return res.status(200).json({ message: 'Deleted Successfully' })
+    },
+    async indexBloodCounts(req, res) {
+        if(! await hasDoctor(null, req.params.crm)) return res.status(400).json({"Error": "Doctor not found"})
+        const id = await getDoctorId(req.params.crm)
+        //Needs correction (Need a query).
+        const bloodCounts = await BloodCount.sequelize.query("QUERY").catch(error => {
+            res.status(400).json({error})
+        })
+        res.status(200).json(bloodCounts)
     }
 }
