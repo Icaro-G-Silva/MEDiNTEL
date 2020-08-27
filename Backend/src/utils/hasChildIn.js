@@ -19,24 +19,21 @@ async function getExam(bloodCountId, type) {
             exam = await Plaquetario.findOne({where: {bloodCountId}})
             return exam
         default:
-            throw new Error(`Wrong option from 'GetExam' on 'hasChildIn'`)
+            throw new Error(`Wrong option from 'GetExam' in 'hasChildIn'`)
     }
 }
 
 module.exports = {
     async hasEritogramaIn(bloodCountId) {
         const exam = await getExam(bloodCountId, 'eritograma')
-        if(!exam) return false
-        else return true
+        return !exam ? false : true
     },
     async hasLeucogramaIn(bloodCountId) {
         const exam = await getExam(bloodCountId, 'leucograma')
-        if(!exam) return false
-        else return true
+        return !exam ? false : true
     },
     async hasPlaquetarioIn(bloodCountId) {
         const exam = await getExam(bloodCountId, 'plaquetario')
-        if(!exam) return false
-        else return true
+        return !exam ? false : true
     }
 }

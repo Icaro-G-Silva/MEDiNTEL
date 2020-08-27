@@ -24,7 +24,7 @@ module.exports = {
             }
             res.status(401).json({error: 'Unauthorized. Login or Password incorrect'})
         } catch (error) {
-            res.status(400).json({error: `Error -> ${error}`})
+            res.status(400).json({error: `Auth error -> ${error}`})
         }
     }
 }

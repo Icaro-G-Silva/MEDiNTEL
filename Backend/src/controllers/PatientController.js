@@ -4,7 +4,6 @@ const { validateDocument } = require('../utils/verifyCPF')
 const { hasDoctor, hasPatient } = require('../utils/hasRegister')
 const { getDoctorId, getPatientId } = require('../utils/getIds')
 const { createPatientId, createHash } = require('../utils/createHashes')
-//const { takePasswdOut } = require('../utils/takePasswdOut')
 const auth = require('../utils/authentication')
 
 
@@ -39,7 +38,7 @@ module.exports = {
             return res.status(400).json({ error })
         })
         if(patients) return res.status(200).json(patients.doctor)
-        else return res.status(400).json({error: 'Patient not found'})
+        else return res.status(404).json({error: 'Patient not found'})
     },
     async store(req, res) {
         const { doctorCRM } = req.body
@@ -124,7 +123,7 @@ module.exports = {
     },
     async indexSpecificBloodCount(req, res) {
         const id = await getPatientId(parseInt(req.params.rp))
-        if(!await hasPatient(id)) return res.status(400).json({error: 'Patient not found'})
+        if(!await hasPatient(id)) return res.status(404).json({error: 'Patient not found'})
 
         const bloodCounts = await BloodCount.findAll({where: {patientId: id}, include: {all: true}}).catch(error => {
             res.status(400).json({error})
