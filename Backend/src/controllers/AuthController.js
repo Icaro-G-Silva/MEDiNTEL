@@ -2,6 +2,8 @@ const Doctor = require('../models/Doctor')
 const Patient = require('../models/Patient')
 const auth = require('../utils/authentication')
 const { validateHash } = require('../utils/createHashes')
+const { AuthErrors } = require('../utils/errorTexts')
+const authErrors = new AuthErrors()
 
 module.exports = {
     async login(req, res) {
@@ -22,9 +24,18 @@ module.exports = {
                     res.status(200).json(token)
                 }
             }
-            res.status(401).json({error: 'Unauthorized. Login or Password incorrect'})
+            res.status(401).json({error: authErrors.unauthorized('Login or Password incorrect')})
         } catch (error) {
-            res.status(400).json({error: `Auth error -> ${error}`})
+            res.status(400).json({error: authErrors.errorAtController(error)})
+        }
+    },
+    async verifyToken(req, res) {
+        const token = req.params.token
+        try {
+            res.status(200).json(auth.verify(token))
+        } catch (error) {
+            if(error.message === 'invalid signature') res.status(401).json({error: authErrors.unauthorized(error.message)})
+            else res.status(400).json({error: authErrors.errorAtController(error)})
         }
     }
 }

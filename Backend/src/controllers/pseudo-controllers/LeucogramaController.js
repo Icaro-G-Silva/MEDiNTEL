@@ -2,10 +2,12 @@ const LeucogramaModel = require('../../models/Leucograma')
 const {createLeucogramaId} = require('../../utils/createHashes')
 const {verifyBloodDatasInputs} = require('../../utils/verifyBloodDatasInputs')
 const { hasLeucogramaIn } = require('../../utils/hasChildIn')
+const { PseudoElements } = require('../../utils/errorTexts')
+const leucogramErrors = new PseudoElements('Leucograma')
 
 class Leucograma {
     constructor(bloodCountId = null, datas = {}) {
-        if(!verifyBloodDatasInputs(bloodCountId, datas)) throw new Error(`datas' Object is not fitting`)
+        if(!verifyBloodDatasInputs(bloodCountId, datas)) throw new Error(leucogramErrors.dataObjectNotFit)
         this.id = bloodCountId
         this.leucocitos = datas['leucocitos']
         this.celulasBlasticas = datas['celulasBlasticas']
@@ -23,7 +25,7 @@ class Leucograma {
     }
 
     async store() {
-        if(await hasLeucogramaIn(this.id)) return `The Leucograma has been registered before!`
+        if(await hasLeucogramaIn(this.id)) return leucogramErrors.isAlreadyRegistered
         const id = await createLeucogramaId()
         const leucograma = await LeucogramaModel.create({
             id,
@@ -42,13 +44,13 @@ class Leucograma {
             plasmocito: this.plasmocito,
             bloodCountId: this.id
         }).catch(error => {
-            throw new Error(`Error ocurred at 'LeucogramaController' -> ${error}`)
+            throw new Error(leucogramErrors.errorAtController(error))
         })
         return true
     }
 
     async update() {
-        if(!await hasLeucogramaIn(this.id)) return `Does not has any leucograma registered!`
+        if(!await hasLeucogramaIn(this.id)) return leucogramErrors.anyXRegistered
         const leucograma = await LeucogramaModel.update({
             leucocitos: this.leucocitos,
             celulasBlasticas: this.celulasBlasticas,
@@ -67,15 +69,15 @@ class Leucograma {
         }, {
             where: {bloodCountId: this.id}
         }).catch(error => {
-            throw new Error(`Error ocurred at 'LeucogramaController' -> ${error}`)
+            throw new Error(leucogramErrors.errorAtController(error))
         })
         return true
     }
 
     static async delete(bloodCountId = null) {
-        if(bloodCountId === null) throw new Error(`Blood Count ID is not fitting`)
+        if(bloodCountId === null) throw new Error(leucogramErrors.bloodCountNotFit)
         const leucograma = await LeucogramaModel.destroy({where:{bloodCountId}}).catch(error =>{
-            throw new Error(`Error ocurred at 'LeucogramaController' -> ${error}`)
+            throw new Error(leucogramErrors.errorAtController(error))
         })
         return true
     }

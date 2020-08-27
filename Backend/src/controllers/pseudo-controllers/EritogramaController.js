@@ -2,10 +2,12 @@ const EritogramaModel = require('../../models/Eritograma')
 const {createEritogramaId} = require('../../utils/createHashes')
 const {verifyBloodDatasInputs} = require('../../utils/verifyBloodDatasInputs')
 const { hasEritogramaIn } = require('../../utils/hasChildIn')
+const { PseudoElements } = require('../../utils/errorTexts')
+const eritogramErrors = new PseudoElements('Eritograma')
 
 class Eritograma {
     constructor(bloodCountId = null, datas = {}) {
-        if(!verifyBloodDatasInputs(bloodCountId, datas)) throw new Error(`datas' Object is not fitting`)
+        if(!verifyBloodDatasInputs(bloodCountId, datas)) throw new Error(eritogramErrors.dataObjectNotFit)
         this.id = bloodCountId
         this.eritrocitos = datas['eritrocitos']
         this.hemoglobina = datas['hemoglobina']
@@ -17,7 +19,7 @@ class Eritograma {
     }
 
     async store() {
-        if(await hasEritogramaIn(this.id)) return `The Eritogram has been registered before!`
+        if(await hasEritogramaIn(this.id)) return eritogramErrors.isAlreadyRegistered
         const id = await createEritogramaId()
         const eritograma = await EritogramaModel.create({
             id,
@@ -30,13 +32,13 @@ class Eritograma {
             RDW: this.RDW,
             bloodCountId: this.id
         }).catch(error => {
-            throw new Error(`Error ocurred at 'EritogramaController' -> ${error}`)
+            throw new Error(eritogramErrors.errorAtController(error))
         })
         return true
     }
 
     async update() {
-        if(!await hasEritogramaIn(this.id))  return `Does not has any eritograma registered!`
+        if(!await hasEritogramaIn(this.id))  return eritogramErrors.anyXRegistered
         const eritograma = await EritogramaModel.update({
             eritrocitos: this.eritrocitos,
             hemoglobina: this.hemoglobina,
@@ -49,15 +51,15 @@ class Eritograma {
         }, {
             where: {bloodCountId: this.id}
         }).catch(error => {
-            throw new Error(`Error ocurred at 'EritogramaController' -> ${error}`)
+            throw new Error(eritogramErrors.errorAtController(error))
         })
         return true
     }
 
     static async delete(bloodCountId = null) {
-        if(bloodCountId === null) throw new Error(`Blood Count ID is not fitting`)
+        if(bloodCountId === null) throw new Error(eritogramErrors.bloodCountNotFit)
         const eritograma = await EritogramaModel.destroy({where:{bloodCountId}}).catch(error =>{
-            throw new Error(`Error ocurred at 'EritogramaController' -> ${error}`)
+            throw new Error(eritogramErrors.errorAtController(error))
         })
         return true
     }
