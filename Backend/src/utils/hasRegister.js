@@ -6,27 +6,33 @@ const Leucograma = require('../models/Leucograma')
 const Plaquetario = require('../models/Plaquetario')
 
 module.exports = {
-    async hasDoctor(id = null, crm = null) {
+    async hasDoctor(id = null, crm = null, login = null) {
         if(crm !== null) {
-            var relatedDoctor = await Doctor.findOne({where: {crm}})
+            var relatedDoctor = await Doctor.findOne({where: { crm } })
         }
         if(id !== null) {
             var relatedDoctor = await Doctor.findOne({ where: { id } })
         }
+        if(login !== null) {
+            var relatedDoctor = await Doctor.findOne({ where: { login } })
+        }
         if(!relatedDoctor || relatedDoctor == null) return false
-        else if(id === false || crm === false) return false
+        else if(id === false || crm === false || login === false) return false
         else return true
         
     },
-    async hasPatient(id = null, rp = null) {
+    async hasPatient(id = null, rp = null, login = null) {
         if(rp !== null) {
             var relatedPatient = await Patient.findOne({ where: { rp } })
         }
         if(id !== null) {
             var relatedPatient = await Patient.findOne({ where: { id } })
         }
+        if(login !== null) {
+            var relatedPatient = await Patient.findOne({ where: { login } })
+        }
         if(!relatedPatient || relatedPatient == null) return false
-        else if(id === false || rp === false) return false
+        else if(id === false || rp === false || login === false) return false
         else return true
     },
     async hasBloodCount(id = null, requestNumber = null) {

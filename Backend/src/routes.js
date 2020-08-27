@@ -3,6 +3,7 @@ const router = Router()
 const PatientController = require('./controllers/PatientController')
 const DoctorController = require('./controllers/DoctorController')
 const BloodCountController = require('./controllers/BloodCountController')
+const AuthController = require('./controllers/AuthController')
 
 router.post('/patient', PatientController.store)
 router.get('/patients', PatientController.index)
@@ -26,6 +27,8 @@ router.get('/bloodCounts', BloodCountController.index)
 router.get('/bloodCount/:reqNumber', BloodCountController.indexSpecific)
 router.put('/bloodCount/:reqNumber/:type', BloodCountController.update)
 router.delete('/bloodCount/:reqNumber/:type', BloodCountController.delete)
+
+router.get('/login', AuthController.login)
 
 router.get('/', (req, res) => {
     return res.status(200).json({ message: "Connected Successfully" })
