@@ -20,7 +20,7 @@ module.exports ={
 
         await fs.writeFile(configPath, content, (err)=>{
             if(err) return console.log(`Error: ${err.message}`);
-            else return console.log(`File was been written`);
+            else return console.log(`File 'database.js' has been subscribed`);
         });
 
         const connection = await mysql.createConnection({

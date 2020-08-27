@@ -17,7 +17,7 @@ module.exports = {
         return res.status(200).json(bloodCount)
     },
     async indexSpecific(req, res) {
-        if(!await hasBloodCount(null, req.params.reqNumber)) return res.status(400).json({"Error": "BloodCount not found"})
+        if(!await hasBloodCount(null, req.params.reqNumber)) return res.status(404).json({error: 'BloodCount not found'})
         const id = await getBloodCountId(req.params.reqNumber)
         const bloodCount = await BloodCount.findByPk(id, {
             include: { all: true }
@@ -54,7 +54,7 @@ module.exports = {
         async function bloodCountStore(res) {
             
             const patientId = await getPatientId(rp)
-            if(!patientId) return res.status(400).json({error: 'Patient does not exists'})
+            if(!patientId) return res.status(404).json({error: 'Patient does not exists'})
             const bloodCountInfo = {
                 id: bloodCountId,
                 requestNumber,
@@ -74,7 +74,7 @@ module.exports = {
             await BloodCount.create(bloodCountInfo).catch(error => {
                 return res.status(400).json({error})
             })
-            return 'The Blood Count was registered successfully!'
+            return 'The Blood Count has been registered successfully!'
         }
         
         async function eritogramaStore(res) {
@@ -90,8 +90,8 @@ module.exports = {
             const eritograma = new Eritograma(bloodCountId, eritogramaInfo)
             const confirm = await eritograma.store()
             if(typeof confirm === 'string') return res.status(400).json({message: confirm})
-            if(!confirm) return res.status(400).json({message: 'Someshit happenned'})
-            return 'The Eritograma was registered successfully!'
+            if(!confirm) return res.status(400).json({message: 'Some shit happened'})
+            return 'The Eritograma has been registered successfully!'
         }
         
         async function leucogramaStore(res) {
@@ -113,16 +113,16 @@ module.exports = {
             const leucograma = new Leucograma(bloodCountId, leucogramaInfo)
             const confirm = await leucograma.store()
             if(typeof confirm === 'string') return res.status(400).json({message: confirm})
-            if(!confirm) return res.status(400).json({message: 'Someshit happenned'})
-            return 'The Leucograma was registered successfully!'
+            if(!confirm) return res.status(400).json({message: 'Some shit happened'})
+            return 'The Leucograma has been registered successfully!'
         }
 
         async function plaquetarioStore(res) {
             const plaquetario = new Plaquetario(bloodCountId, plaquetas)
             const confirm = await plaquetario.store()
             if(typeof confirm === 'string') return res.status(400).json({message: confirm})
-            if(!confirm) return res.status(400).json({message: 'Someshit happenned'})
-            return 'The Plaquetario was registered successfully!'
+            if(!confirm) return res.status(400).json({message: 'Some shit happened'})
+            return 'The Plaquetario has been registered successfully!'
         }
 
         switch (type) {
@@ -136,7 +136,7 @@ module.exports = {
                 //Plaquetario Store
                 await plaquetarioStore(res)
 
-                return res.status(200).json({message: 'The entire Blood Count was registered successfully!'})
+                return res.status(200).json({message: 'The entire Blood Count has been registered successfully!'})
             case 'bloodCount':
                 //Blood Count Store
                 control = await bloodCountStore(res)
@@ -190,7 +190,7 @@ module.exports = {
         const {plaquetas} = req.body
 
         //Common Datas
-        if(!await hasBloodCount(null, requestNumber)) return res.status(400).json({error: 'Blood Count not found'})
+        if(!await hasBloodCount(null, requestNumber)) return res.status(404).json({error: 'Blood Count not found'})
         const bloodCountId = await getBloodCountId(requestNumber)
 
         async function bloodCountUpdate(res) {
@@ -215,7 +215,7 @@ module.exports = {
             const bloodCount = await BloodCount.update(bloodCountInfo, {where: {id: bloodCountId}}).catch(error => {
                 return res.status(400).json({error})
             })
-            return 'The Blood Count was Updated Successfully!'
+            return 'The Blood Count has been Updated Successfully!'
         }
 
         async function eritogramaUpdate(res) {
@@ -232,7 +232,7 @@ module.exports = {
             const confirm = await eritograma.update()
             if(typeof confirm === 'string') return res.status(400).json({message: confirm})
             if(!confirm) return res.status(400).json({message: 'Some shit happened'})
-            return 'The Eritograma was Updated Successfully!'
+            return 'The Eritograma has been Updated Successfully!'
         }
 
         async function leucogramaUpdate(res) {
@@ -255,7 +255,7 @@ module.exports = {
             const confirm = await leucograma.update()
             if(typeof confirm === 'string') return res.status(400).json({message: confirm})
             if(!confirm) return res.status(400).json({message: 'Some shit happened'})
-            return 'The Leucograma was Updated Successfully!'
+            return 'The Leucograma has been Updated Successfully!'
         }
 
         async function plaquetarioUpdate(res) {
@@ -263,7 +263,7 @@ module.exports = {
             const confirm = await plaquetario.update()
             if(typeof confirm === 'string') return res.status(400).json({message: confirm})
             if(!confirm) return res.status(400).json({message: 'Some shit happened'})
-            return 'The Plaquetario was Updated Successfully!'
+            return 'The Plaquetario has been Updated Successfully!'
         }
 
         switch (type) {
@@ -277,7 +277,7 @@ module.exports = {
                 //Plaquetario Update
                 await plaquetarioUpdate(res)
 
-                return res.status(200).json({message: 'The Entire Blood Count was Updated Successfully!'})
+                return res.status(200).json({message: 'The Entire Blood Count has been Updated Successfully!'})
 
             case 'bloodCount':
                 //Blood Count Update
@@ -321,7 +321,7 @@ module.exports = {
         const {plaquetas} = req.body
 
         //Common Datas
-        if(!await hasBloodCount(null, requestNumber)) return res.status(400).json({error: 'Blood Count not found'})
+        if(!await hasBloodCount(null, requestNumber)) return res.status(404).json({error: 'Blood Count not found'})
         const bloodCountId = await getBloodCountId(requestNumber)
         
         async function eritogramaStore(res) {
@@ -337,8 +337,8 @@ module.exports = {
             const eritograma = new Eritograma(bloodCountId, eritogramaInfo)
             const confirm = await eritograma.store()
             if(typeof confirm === 'string') return res.status(400).json({message: confirm})
-            if(!confirm) return res.status(400).json({message: 'Someshit happenned'})
-            return 'The Eritograma was registered successfully!'
+            if(!confirm) return res.status(400).json({message: 'Some shit happened'})
+            return 'The Eritograma has been registered successfully!'
         }
         
         async function leucogramaStore(res) {
@@ -360,16 +360,16 @@ module.exports = {
             const leucograma = new Leucograma(bloodCountId, leucogramaInfo)
             const confirm = await leucograma.store()
             if(typeof confirm === 'string') return res.status(400).json({message: confirm})
-            if(!confirm) return res.status(400).json({message: 'Someshit happenned'})
-            return 'The Leucograma was registered successfully!'
+            if(!confirm) return res.status(400).json({message: 'Some shit happened'})
+            return 'The Leucograma has been registered successfully!'
         }
 
         async function plaquetarioStore(res) {
             const plaquetario = new Plaquetario(bloodCountId, plaquetas)
             const confirm = await plaquetario.store()
             if(typeof confirm === 'string') return res.status(400).json({message: confirm})
-            if(!confirm) return res.status(400).json({message: 'Someshit happenned'})
-            return 'The Plaquetario was registered successfully!'
+            if(!confirm) return res.status(400).json({message: 'Some shit happened'})
+            return 'The Plaquetario has been registered successfully!'
         }
 
         switch (type) {
@@ -381,7 +381,7 @@ module.exports = {
                 //Plaquetario Store
                 await plaquetarioStore(res)
 
-                return res.status(200).json({message: 'The entire Blood Count was registered successfully!'})
+                return res.status(200).json({message: 'The entire Blood Count has been registered successfully!'})
             case 'eritograma':
                 //Eritograma Store
                 control = await eritogramaStore(res)
@@ -406,7 +406,7 @@ module.exports = {
         const type = altType.toLowerCase()
         const requestNumber = parseInt(req.params.reqNumber)
 
-        if(!await hasBloodCount(null, requestNumber)) return res.status(400).json({error: 'Blood Count not found'})
+        if(!await hasBloodCount(null, requestNumber)) return res.status(404).json({error: 'Blood Count not found'})
         const bloodCountId = await getBloodCountId(requestNumber)
 
         switch (type) {
@@ -418,22 +418,22 @@ module.exports = {
                 return res.status(200).json({ message: 'Blood Count deleted Successfully' })
             case 'eritograma':
                 //Eritograma Delete
-                if(!await hasEritograma(null, bloodCountId)) return res.status(400).json({error: 'Eritograma not found'})
+                if(!await hasEritograma(null, bloodCountId)) return res.status(404).json({error: 'Eritograma not found'})
                 
                 if(await Eritograma.delete(bloodCountId)) return res.status(200).json({ message: 'Eritograma deleted Successfully' })
-                else return res.status(400).json({message: 'Someshit happenned'})
+                else return res.status(400).json({message: 'Some shit happened'})
             case 'leucograma':
                 //Leucograma Delete
-                if(!await hasLeucograma(null, bloodCountId)) return res.status(400).json({error: 'Leucograma not found'})
+                if(!await hasLeucograma(null, bloodCountId)) return res.status(404).json({error: 'Leucograma not found'})
                 
                 if(await Leucograma.delete(bloodCountId)) return res.status(200).json({ message: 'Leucograma deleted Successfully' })
-                else return res.status(400).json({message: 'Someshit happenned'})
+                else return res.status(400).json({message: 'Some shit happened'})
             case 'plaquetario':
                 //Plaquetario Delete
-                if(!await hasPlaquetario(null, bloodCountId)) return res.status(400).json({error: 'Plaquetario not found'})
+                if(!await hasPlaquetario(null, bloodCountId)) return res.status(404).json({error: 'Plaquetario not found'})
                 
                 if(await Plaquetario.delete(bloodCountId)) return res.status(200).json({ message: 'Plaquetario deleted Successfully' })
-                else return res.status(400).json({message: 'Someshit happenned'})
+                else return res.status(400).json({message: 'Some shit happened'})
             default:
                 return res.status(400).json({error: 'Invalid Option to Delete'})
         }

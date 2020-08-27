@@ -14,7 +14,6 @@ module.exports = {
         const sumA = ((digitA % 11) < 2) ? 0 : 11 - (digitA % 11)
         const sumB = ((digitB % 11) < 2) ? 0 : 11 - (digitB % 11)
 
-        if(sumA != cpf[9] || sumB != cpf[10]) return false
-        else return true
+        return sumA != cpf[9] || sumB != cpf[10] ? false : true
     }
 }
