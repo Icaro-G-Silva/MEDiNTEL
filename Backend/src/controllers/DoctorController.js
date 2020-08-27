@@ -107,10 +107,11 @@ module.exports = {
     async indexBloodCounts(req, res) {
         if(! await hasDoctor(null, req.params.crm)) return res.status(400).json({"Error": "Doctor not found"})
         const id = await getDoctorId(req.params.crm)
-        //Needs correction (Need a query).
-        const bloodCounts = await BloodCount.sequelize.query("QUERY").catch(error => {
-            res.status(400).json({error})
+        const patients = await Patient.findAll({
+            where: { doctorId: id }, include: { all: true }
+        }).catch(error => {
+            return res.status(400).json({ error })
         })
-        res.status(200).json(bloodCounts)
+        return res.status(200).json(patients)
     }
 }
