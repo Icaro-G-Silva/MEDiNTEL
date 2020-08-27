@@ -29,6 +29,7 @@ router.put('/bloodCount/:reqNumber/:type', BloodCountController.update)
 router.delete('/bloodCount/:reqNumber/:type', BloodCountController.delete)
 
 router.get('/login', AuthController.login)
+router.get('/token/:token/verify', AuthController.verifyToken)
 
 router.get('/', (req, res) => {
     return res.status(200).json({ message: "Connected Successfully" })

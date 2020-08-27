@@ -2,27 +2,31 @@ const BloodCount = require('../models/BloodCount')
 const Eritograma = require('../controllers/pseudo-controllers/EritogramaController')
 const Leucograma = require('../controllers/pseudo-controllers/LeucogramaController')
 const Plaquetario = require('../controllers/pseudo-controllers/PlaquetarioController')
-
 const { hasBloodCount, hasEritograma, hasLeucograma, hasPlaquetario } = require('../utils/hasRegister')
 const { createBloodCountId } = require('../utils/createHashes')
 const { getBloodCountId, getPatientId } = require('../utils/getIds')
+const { BloodCountErrors, PseudoElements } = require('../utils/errorTexts')
+const bloodCountErrors = new BloodCountErrors()
+const eritogramErrors = new PseudoElements('Eritograma')
+const leucogramErrors = new PseudoElements('Leucograma')
+const plateletErrors = new PseudoElements('Plaquetario')
 
 module.exports = {
     async index(req, res) {
         const bloodCount = await BloodCount.findAll({
             include: { all: true },
         }).catch(error => {
-            return res.status(400).json({ error })
+            return res.status(400).json({ error: bloodCountErrors.errorAtController(error) })
         })
         return res.status(200).json(bloodCount)
     },
     async indexSpecific(req, res) {
-        if(!await hasBloodCount(null, req.params.reqNumber)) return res.status(404).json({error: 'BloodCount not found'})
+        if(!await hasBloodCount(null, req.params.reqNumber)) return res.status(404).json({error: bloodCountErrors.notFound })
         const id = await getBloodCountId(req.params.reqNumber)
         const bloodCount = await BloodCount.findByPk(id, {
             include: { all: true }
         }).catch(error => {
-            return res.status(400).json({ error })
+            return res.status(400).json({ error: bloodCountErrors.errorAtController(error) })
         })
         return res.status(200).json(bloodCount)
     },
@@ -48,13 +52,13 @@ module.exports = {
         const {plaquetas} = req.body
 
         //Common Datas
-        if(await hasBloodCount(null, requestNumber)) return res.status(400).json({error: 'Blood Count is already registered'})
+        if(await hasBloodCount(null, requestNumber)) return res.status(400).json({error: bloodCountErrors.isAlreadyRegistered})
         const bloodCountId = await createBloodCountId()
         
         async function bloodCountStore(res) {
             
             const patientId = await getPatientId(rp)
-            if(!patientId) return res.status(404).json({error: 'Patient does not exists'})
+            if(!patientId) return res.status(404).json({error: bloodCountErrors.patientNotExists})
             const bloodCountInfo = {
                 id: bloodCountId,
                 requestNumber,
@@ -72,7 +76,7 @@ module.exports = {
                 patientId
             }
             await BloodCount.create(bloodCountInfo).catch(error => {
-                return res.status(400).json({error})
+                return res.status(400).json({ error: bloodCountErrors.errorAtController(error) })
             })
             return 'The Blood Count has been registered successfully!'
         }
@@ -90,7 +94,7 @@ module.exports = {
             const eritograma = new Eritograma(bloodCountId, eritogramaInfo)
             const confirm = await eritograma.store()
             if(typeof confirm === 'string') return res.status(400).json({message: confirm})
-            if(!confirm) return res.status(400).json({message: 'Some shit happened'})
+            if(!confirm) return res.status(400).json({message: eritogramErrors.someShitHappened})
             return 'The Eritograma has been registered successfully!'
         }
         
@@ -113,7 +117,7 @@ module.exports = {
             const leucograma = new Leucograma(bloodCountId, leucogramaInfo)
             const confirm = await leucograma.store()
             if(typeof confirm === 'string') return res.status(400).json({message: confirm})
-            if(!confirm) return res.status(400).json({message: 'Some shit happened'})
+            if(!confirm) return res.status(400).json({message: leucogramErrors.someShitHappened})
             return 'The Leucograma has been registered successfully!'
         }
 
@@ -121,7 +125,7 @@ module.exports = {
             const plaquetario = new Plaquetario(bloodCountId, plaquetas)
             const confirm = await plaquetario.store()
             if(typeof confirm === 'string') return res.status(400).json({message: confirm})
-            if(!confirm) return res.status(400).json({message: 'Some shit happened'})
+            if(!confirm) return res.status(400).json({message: plateletErrors.someShitHappened})
             return 'The Plaquetario has been registered successfully!'
         }
 
@@ -190,12 +194,12 @@ module.exports = {
         const {plaquetas} = req.body
 
         //Common Datas
-        if(!await hasBloodCount(null, requestNumber)) return res.status(404).json({error: 'Blood Count not found'})
+        if(!await hasBloodCount(null, requestNumber)) return res.status(404).json({error: bloodCountErrors.notFound})
         const bloodCountId = await getBloodCountId(requestNumber)
 
         async function bloodCountUpdate(res) {
             const patientId = await getPatientId(rp)
-            if(!patientId) return res.status(400).json({error: 'Patient does not exists'})
+            if(!patientId) return res.status(400).json({error: bloodCountErrors.patientNotExists})
             const bloodCountInfo = {
                 id: bloodCountId,
                 requestNumber,
@@ -213,7 +217,7 @@ module.exports = {
                 patientId
             }
             const bloodCount = await BloodCount.update(bloodCountInfo, {where: {id: bloodCountId}}).catch(error => {
-                return res.status(400).json({error})
+                return res.status(400).json({ error: bloodCountErrors.errorAtController(error) })
             })
             return 'The Blood Count has been Updated Successfully!'
         }
@@ -231,7 +235,7 @@ module.exports = {
             const eritograma = new Eritograma(bloodCountId, eritogramaInfo)
             const confirm = await eritograma.update()
             if(typeof confirm === 'string') return res.status(400).json({message: confirm})
-            if(!confirm) return res.status(400).json({message: 'Some shit happened'})
+            if(!confirm) return res.status(400).json({message: eritogramErrors.someShitHappened})
             return 'The Eritograma has been Updated Successfully!'
         }
 
@@ -254,7 +258,7 @@ module.exports = {
             const leucograma = new Leucograma(bloodCountId, leucogramaInfo)
             const confirm = await leucograma.update()
             if(typeof confirm === 'string') return res.status(400).json({message: confirm})
-            if(!confirm) return res.status(400).json({message: 'Some shit happened'})
+            if(!confirm) return res.status(400).json({message: leucogramErrors.someShitHappened})
             return 'The Leucograma has been Updated Successfully!'
         }
 
@@ -262,7 +266,7 @@ module.exports = {
             const plaquetario = new Plaquetario(bloodCountId, plaquetas)
             const confirm = await plaquetario.update()
             if(typeof confirm === 'string') return res.status(400).json({message: confirm})
-            if(!confirm) return res.status(400).json({message: 'Some shit happened'})
+            if(!confirm) return res.status(400).json({message: plateletErrors.someShitHappened})
             return 'The Plaquetario has been Updated Successfully!'
         }
 
@@ -321,7 +325,7 @@ module.exports = {
         const {plaquetas} = req.body
 
         //Common Datas
-        if(!await hasBloodCount(null, requestNumber)) return res.status(404).json({error: 'Blood Count not found'})
+        if(!await hasBloodCount(null, requestNumber)) return res.status(404).json({error: bloodCountErrors.notFound})
         const bloodCountId = await getBloodCountId(requestNumber)
         
         async function eritogramaStore(res) {
@@ -337,7 +341,7 @@ module.exports = {
             const eritograma = new Eritograma(bloodCountId, eritogramaInfo)
             const confirm = await eritograma.store()
             if(typeof confirm === 'string') return res.status(400).json({message: confirm})
-            if(!confirm) return res.status(400).json({message: 'Some shit happened'})
+            if(!confirm) return res.status(400).json({message: eritogramErrors.someShitHappened})
             return 'The Eritograma has been registered successfully!'
         }
         
@@ -360,7 +364,7 @@ module.exports = {
             const leucograma = new Leucograma(bloodCountId, leucogramaInfo)
             const confirm = await leucograma.store()
             if(typeof confirm === 'string') return res.status(400).json({message: confirm})
-            if(!confirm) return res.status(400).json({message: 'Some shit happened'})
+            if(!confirm) return res.status(400).json({message: leucogramErrors.someShitHappened})
             return 'The Leucograma has been registered successfully!'
         }
 
@@ -368,7 +372,7 @@ module.exports = {
             const plaquetario = new Plaquetario(bloodCountId, plaquetas)
             const confirm = await plaquetario.store()
             if(typeof confirm === 'string') return res.status(400).json({message: confirm})
-            if(!confirm) return res.status(400).json({message: 'Some shit happened'})
+            if(!confirm) return res.status(400).json({message: plateletErrors.someShitHappened})
             return 'The Plaquetario has been registered successfully!'
         }
 
@@ -406,34 +410,34 @@ module.exports = {
         const type = altType.toLowerCase()
         const requestNumber = parseInt(req.params.reqNumber)
 
-        if(!await hasBloodCount(null, requestNumber)) return res.status(404).json({error: 'Blood Count not found'})
+        if(!await hasBloodCount(null, requestNumber)) return res.status(404).json({error: bloodCountErrors.notFound})
         const bloodCountId = await getBloodCountId(requestNumber)
 
         switch (type) {
             case 'complete':
                 //Blood Count Delete
                 const bloodCount = await BloodCount.destroy({where:{id: bloodCountId}}).catch(error =>{
-                    return res.status(400).json({ error })
+                    return res.status(400).json({ error: bloodCountErrors.errorAtController(error) })
                 })
                 return res.status(200).json({ message: 'Blood Count deleted Successfully' })
             case 'eritograma':
                 //Eritograma Delete
-                if(!await hasEritograma(null, bloodCountId)) return res.status(404).json({error: 'Eritograma not found'})
+                if(!await hasEritograma(null, bloodCountId)) return res.status(404).json({error: eritogramErrors.notFound})
                 
                 if(await Eritograma.delete(bloodCountId)) return res.status(200).json({ message: 'Eritograma deleted Successfully' })
-                else return res.status(400).json({message: 'Some shit happened'})
+                else return res.status(400).json({message: eritogramErrors.someShitHappened})
             case 'leucograma':
                 //Leucograma Delete
-                if(!await hasLeucograma(null, bloodCountId)) return res.status(404).json({error: 'Leucograma not found'})
+                if(!await hasLeucograma(null, bloodCountId)) return res.status(404).json({error: leucogramErrors.notFound})
                 
                 if(await Leucograma.delete(bloodCountId)) return res.status(200).json({ message: 'Leucograma deleted Successfully' })
-                else return res.status(400).json({message: 'Some shit happened'})
+                else return res.status(400).json({message: leucogramErrors.someShitHappened})
             case 'plaquetario':
                 //Plaquetario Delete
-                if(!await hasPlaquetario(null, bloodCountId)) return res.status(404).json({error: 'Plaquetario not found'})
+                if(!await hasPlaquetario(null, bloodCountId)) return res.status(404).json({error: plateletErrors.notFound})
                 
                 if(await Plaquetario.delete(bloodCountId)) return res.status(200).json({ message: 'Plaquetario deleted Successfully' })
-                else return res.status(400).json({message: 'Some shit happened'})
+                else return res.status(400).json({message: plateletErrors.someShitHappened})
             default:
                 return res.status(400).json({error: 'Invalid Option to Delete'})
         }
