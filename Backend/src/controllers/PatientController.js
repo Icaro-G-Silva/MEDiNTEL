@@ -1,4 +1,5 @@
 const Patient = require('../models/Patient')
+const BloodCount = require('../models/BloodCount')
 const { validateDocument } = require('../utils/verifyCPF')
 const { hasDoctor, hasPatient } = require('../utils/hasRegister')
 const { getDoctorId, getPatientId } = require('../utils/getIds')
@@ -80,7 +81,8 @@ module.exports = {
     async update(req, res) {
         const { rp, name, surname, idDocument, birth, sex, login, password, accessLevel, doctorCRM } = req.body
 
-        const crmSliced = doctorCRM.replace('/', '')
+        var crmSliced = false
+        if(doctorCRM != null) crmSliced = doctorCRM.replace('/', '')
 
         const id = await getPatientId(parseInt(req.params.rp))
         if(!await hasPatient(id)) return res.status(404).json({error: 'Patient not found'})
@@ -119,5 +121,14 @@ module.exports = {
             return res.status(400).json({ error })
         })
         return res.status(200).json({ message: 'Deleted Successfully' })
+    },
+    async indexSpecificBloodCount(req, res) {
+        const id = await getPatientId(parseInt(req.params.rp))
+        if(!await hasPatient(id)) return res.status(400).json({error: 'Patient not found'})
+
+        const bloodCounts = await BloodCount.findAll({where: {patientId: id}, include: {all: true}}).catch(error => {
+            res.status(400).json({error})
+        })
+        res.status(200).json(bloodCounts)
     }
 }
