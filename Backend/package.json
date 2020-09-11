@@ -1,14 +1,13 @@
 {
-  "name": "backend",
+  "name": "medintel",
   "version": "1.0.0",
-  "description": "Backend of the project: MEDiNTEL",
+  "description": "MEDiNTEL RESTful project",
   "main": "index.js",
   "scripts": {
     "run": "nodemon src/index.js",
-    "dbCreate": "node src/utils/dbAssistance/dbCreate/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dbCreate": "node src/utils/dbAssistance/dbCreate/index.js"
   },
-  "keywords": [],
+  "keywords": ["MEDiNTEL", "RESTful", "REST", "Medicine API", "Blood Count", "Project"],
   "author": "Ícaro Gabriel Silva",
   "license": "ISC",
   "dependencies": {

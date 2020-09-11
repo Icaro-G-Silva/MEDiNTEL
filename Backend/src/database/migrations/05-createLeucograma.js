@@ -11,7 +11,7 @@ module.exports = {
         },
         bloodCountId: { //Associate with `BloodCount`
           type: Sequelize.STRING(15),
-          allowNull: true,
+          allowNull: false,
           references: {model: 'BloodCounts', key: 'id'},
           onUpdate: 'CASCADE',
           onDelete: 'CASCADE'
@@ -41,7 +41,7 @@ module.exports = {
           }
         },
         promielocito: {
-          type: Sequelize.FLOAT,
+          type: Sequelize.STRING,
           allowNull: false,
           validate: {
             isEmpty: {
@@ -53,7 +53,7 @@ module.exports = {
           }
         },
         mielocito: {
-          type: Sequelize.FLOAT,
+          type: Sequelize.STRING,
           allowNull: false,
           validate: {
             isEmpty: {
@@ -65,7 +65,7 @@ module.exports = {
           }
         },
         metamielocito: {
-          type: Sequelize.FLOAT,
+          type: Sequelize.STRING,
           allowNull: false,
           validate: {
             isEmpty: {
@@ -77,7 +77,7 @@ module.exports = {
           }
         },
         bastonete: {
-          type: Sequelize.FLOAT,
+          type: Sequelize.STRING,
           allowNull: false,
           validate: {
             isEmpty: {
@@ -89,7 +89,7 @@ module.exports = {
           }
         },
         segmentado: {
-          type: Sequelize.FLOAT,
+          type: Sequelize.STRING,
           allowNull: false,
           validate: {
             isEmpty: {
@@ -101,7 +101,7 @@ module.exports = {
           }
         },
         eosinofilo: {
-          type: Sequelize.FLOAT,
+          type: Sequelize.STRING,
           allowNull: false,
           validate: {
             isEmpty: {
@@ -113,7 +113,7 @@ module.exports = {
           }
         },
         basofilo: {
-          type: Sequelize.FLOAT,
+          type: Sequelize.STRING,
           allowNull: false,
           validate: {
             isEmpty: {
@@ -125,7 +125,7 @@ module.exports = {
           }
         },
         linfocitos: {
-          type: Sequelize.FLOAT,
+          type: Sequelize.STRING,
           allowNull: false,
           validate: {
             isEmpty: {
@@ -137,7 +137,7 @@ module.exports = {
           }
         },
         linfocitosAtipicos: {
-          type: Sequelize.FLOAT,
+          type: Sequelize.STRING,
           allowNull: false,
           validate: {
             isEmpty: {
@@ -149,7 +149,7 @@ module.exports = {
           }
         },
         monocito: {
-          type: Sequelize.FLOAT,
+          type: Sequelize.STRING,
           allowNull: false,
           validate: {
             isEmpty: {
@@ -161,7 +161,7 @@ module.exports = {
           }
         },
         plasmocito: {
-          type: Sequelize.FLOAT,
+          type: Sequelize.STRING,
           allowNull: false,
           validate: {
             isEmpty: {
