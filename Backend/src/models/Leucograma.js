@@ -9,17 +9,17 @@ class Leucograma extends Model {
             },
             leucocitos: DataTypes.FLOAT,
             celulasBlasticas: DataTypes.FLOAT,
-            promielocito: DataTypes.FLOAT,
-            mielocito: DataTypes.FLOAT,
-            metamielocito: DataTypes.FLOAT,
-            bastonete: DataTypes.FLOAT,
-            segmentado: DataTypes.FLOAT,
-            eosinofilo: DataTypes.FLOAT,
-            basofilo: DataTypes.FLOAT,
-            linfocitos: DataTypes.FLOAT,
-            linfocitosAtipicos: DataTypes.FLOAT,
-            monocito: DataTypes.FLOAT,
-            plasmocito: DataTypes.FLOAT
+            promielocito: DataTypes.STRING,
+            mielocito: DataTypes.STRING,
+            metamielocito: DataTypes.STRING,
+            bastonete: DataTypes.STRING,
+            segmentado: DataTypes.STRING,
+            eosinofilo: DataTypes.STRING,
+            basofilo: DataTypes.STRING,
+            linfocitos: DataTypes.STRING,
+            linfocitosAtipicos: DataTypes.STRING,
+            monocito: DataTypes.STRING,
+            plasmocito: DataTypes.STRING
         }, {
             sequelize
         })

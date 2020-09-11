@@ -1,3 +1,11 @@
+/**
+ * CHANGE
+ * ALL
+ * VALUES
+ * 
+ * with something more 'usable'
+ */
+
 module.exports = {
     MaleReferences = {
         eritograma: {
@@ -11,18 +19,18 @@ module.exports = {
         },
         leucograma: {
             leucocitos: [4.40, 10.5],   // thousand/mm³
-            celulasBlasticas: null,     // ?
-            promielocito: null,         // ?
-            mielocito: null,            // ?
-            metamielocito: null,        // ?
-            bastonete: null,            // ?
-            segmentado: [48.0, 71.5],   // %
-            eosinofilo: [0.0, 5.0],     // %
-            basofilo: [0.0, 3.0],       // %
-            linfocitos: [19.0, 50.0],   // %
-            linfocitosAtipico: null,    // ?
-            monocito: [2.0, 12.0],      // %
-            plasmocito: null            // ?
+            celulasBlasticas: [0.0, 0.0],     // thousand/mm³
+            promielocito: [[48.0, 71.5],[0.0, 0.0]],         // % || thousand/mm³
+            mielocito: [[48.0, 71.5],[0.0, 0.0]],            // % || thousand/mm³
+            metamielocito: [[48.0, 71.5],[0.0, 0.0]],        // % || thousand/mm³
+            bastonete: [[48.0, 71.5],[0.0, 0.0]],            // % || thousand/mm³
+            segmentado: [[48.0, 71.5],[0.0, 0.0]],           // % || thousand/mm³
+            eosinofilo: [[48.0, 71.5],[0.0, 0.0]],           // % || thousand/mm³
+            basofilo: [[48.0, 71.5],[0.0, 0.0]],             // % || thousand/mm³
+            linfocitos: [[48.0, 71.5],[0.0, 0.0]],           // % || thousand/mm³
+            linfocitosAtipico: [[48.0, 71.5],[0.0, 0.0]],    // % || thousand/mm³
+            monocito: [[48.0, 71.5],[0.0, 0.0]],             // % || thousand/mm³
+            plasmocito: [[48.0, 71.5],[0.0, 0.0]]            // % || thousand/mm³
         },
         plaquetario: {
             plaquetas: [130.0, 400.0]   // thousand/mm³
@@ -41,18 +49,18 @@ module.exports = {
         },
         leucograma: {
             leucocitos: [4.40, 10.5],   // thousand/mm³
-            celulasBlasticas: null,     // ?
-            promielocito: null,         // ?
-            mielocito: null,            // ?
-            metamielocito: null,        // ?
-            bastonete: null,            // ?
-            segmentado: [48.0, 71.5],   // %
-            eosinofilo: [0.0, 5.0],     // %
-            basofilo: [0.0, 3.0],       // %
-            linfocitos: [19.0, 50.0],   // %
-            linfocitosAtipico: null,    // ?
-            monocito: [2.0, 12.0],      // %
-            plasmocito: null            // ?
+            celulasBlasticas: [0.0, 0.0],     // thousand/mm³
+            promielocito: [[48.0, 71.5],[0.0, 0.0]],         // % || thousand/mm³
+            mielocito: [[48.0, 71.5],[0.0, 0.0]],            // % || thousand/mm³
+            metamielocito: [[48.0, 71.5],[0.0, 0.0]],        // % || thousand/mm³
+            bastonete: [[48.0, 71.5],[0.0, 0.0]],            // % || thousand/mm³
+            segmentado: [[48.0, 71.5],[0.0, 0.0]],           // % || thousand/mm³
+            eosinofilo: [[48.0, 71.5],[0.0, 0.0]],           // % || thousand/mm³
+            basofilo: [[48.0, 71.5],[0.0, 0.0]],             // % || thousand/mm³
+            linfocitos: [[48.0, 71.5],[0.0, 0.0]],           // % || thousand/mm³
+            linfocitosAtipico: [[48.0, 71.5],[0.0, 0.0]],    // % || thousand/mm³
+            monocito: [[48.0, 71.5],[0.0, 0.0]],             // % || thousand/mm³
+            plasmocito: [[48.0, 71.5],[0.0, 0.0]]            // % || thousand/mm³
         },
         plaquetario: {
             plaquetas: [130.0, 400.0]   // thousand/mm³
