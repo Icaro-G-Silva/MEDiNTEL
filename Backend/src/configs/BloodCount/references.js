@@ -7,7 +7,7 @@
  */
 
 module.exports = {
-    MaleReferences = {
+    MaleReferences: {
         eritograma: {
             eritrocitos: [4.20, 6.10], // millions/mm³
             hemoglobina: [12.0, 18.0], // g/dL
@@ -37,7 +37,7 @@ module.exports = {
         }
     },
 
-    FemaleReferences = {
+    FemaleReferences: {
         eritograma: {
             eritrocitos: [4.20, 6.10], // millions/mm³
             hemoglobina: [12.0, 18.0], // g/dL
