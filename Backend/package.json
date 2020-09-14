@@ -7,7 +7,14 @@
     "run": "nodemon src/index.js",
     "dbCreate": "node src/utils/dbAssistance/dbCreate/index.js"
   },
-  "keywords": ["MEDiNTEL", "RESTful", "REST", "Medicine API", "Blood Count", "Project"],
+  "keywords": [
+    "MEDiNTEL",
+    "RESTful",
+    "REST",
+    "Medicine API",
+    "Blood Count",
+    "Project"
+  ],
   "author": "Ícaro Gabriel Silva",
   "license": "ISC",
   "dependencies": {
