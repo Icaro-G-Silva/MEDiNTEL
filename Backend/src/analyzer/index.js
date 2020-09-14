@@ -97,9 +97,141 @@ function analyzeEritograma(variablesObject, sex) {
 }
 
 function analyzeLeucograma(variablesObject, sex) {
+    const referenceObj = (sex == 'masculino') ? references.MaleReferences.leucograma : references.FemaleReferences.leucograma
     var possibleDeviations = []
     
-    //Do the Conditional magics and append the Deviations to the array above.
+    //Leucocitose
+    if(variablesObject.leucocitos > referenceObj.leucocitos[HIGH]) {
+        possibleDeviations.push({
+            deviation: 'Leucocitose',
+            why: 'Leucócitos Altos',
+            causes: ['Infecções Virais', 'Infecções Bacterianas', 'Inflamação aguda ou crônica', 'Leucemias'],
+            recomendations: []
+        })
+    }
+    //Leucopenia
+    else if(variablesObject.leucocitos < referenceObj.leucocitos[LOW]) {
+        possibleDeviations.push({
+            deviation: 'Leucopenia',
+            why: 'Leucócitos Baixos',
+            causes: ['Imunosupressão', 'Anemias graves', 'Neutropenia (Mais comum)', 'Intoxicação por agentes mielotóxicos'],
+            recomendations: []
+        })
+    }
+
+    //Neutrofilia
+    if(variablesObject.segmentados > referenceObj.segmentado[1][HIGH] || variablesObject.bastonetes > referenceObj.bastonete[1][HIGH]) {
+        possibleDeviations.push({
+            deviation: 'Neutrofilia',
+            why: 'Segmentados/Bastonetes Altos',
+            causes: ['Choro/Pânico na hora da coleta', 'Exercício físico antes da coleta', 'Infecções'],
+            recomendations: []
+        })
+    }
+    //Neutropenia
+    else if(variablesObject.segmentados > referenceObj.segmentado[1][LOW] || variablesObject.bastonetes > referenceObj.bastonete[1][LOW]) {
+        possibleDeviations.push({
+            deviation: 'Neutropenia',
+            why: 'Segmentados/Bastonetes Baixos',
+            causes: ['Radiação/Quimioterapia'],
+            recomendations: []
+        })
+    }
+
+    //Linfocitose
+    if(variablesObject.linfocitos > referenceObj.linfocitos[1][HIGH]) {
+        if(variablesObject.monocitos > referenceObj.monocito[1][HIGH]) {
+            possibleDeviations.push({
+                deviation: 'Linfocitose',
+                why: 'Linfócitos Altos',
+                causes: ['Fase de cura das infecções bacterianas'],
+                recomendations: []
+            })
+        } else {
+            possibleDeviations.push({
+                deviation: 'Linfocitose',
+                why: 'Linfócitos Altos',
+                causes: ['Infecções Virais'],
+                recomendations: []
+            })
+        }
+    }
+    //Linfopenia
+    else if(variablesObject.linfocitos < referenceObj.linfocitos[1][LOW]) {
+        possibleDeviations.push({
+            deviation: 'Linfopenia',
+            why: 'Linfócitos Baixos',
+            causes: ['Estresse', 'Radioterapia/Quimioterapia', 'AIDS', 'Sepse', 'Leucemia'],
+            recomendations: []
+        })
+    }
+
+    //Monocitopenia
+    if(variablesObject.monocitos < referenceObj.monocito[1][LOW]) {
+        possibleDeviations.push({
+            deviation: 'Monocitopenia',
+            why: 'Monócitos Baixos',
+            causes: ['Estresse', 'Infecções', 'Falta de Proteínas'],
+            recomendations: []
+        })
+    }
+    //Monocitose
+    else if(variablesObject.monocitos > referenceObj.monocito[1][HIGH]) {
+        possibleDeviations.push({
+            deviation: 'Monocitose',
+            why: 'Monócitos Altos',
+            causes: [],
+            recomendations: []
+        })
+    }
+
+    //Eosinofilia
+    if(variablesObject.eosinofilos > referenceObj.eosinofilo[1][HIGH]) {
+        possibleDeviations.push({
+            deviation: 'Eosinofilia',
+            why: 'Eosinófilos Altos',
+            causes: ['Parasitose', 'Doenças alérgicas', 'Reações a medicamentos'],
+            recomendations: []
+        })
+    }
+
+    //Basofilia
+    if(variablesObject.basofilos > referenceObj.basofilo[1][HIGH]) {
+        possibleDeviations.push({
+            deviation: 'Basofilia',
+            why: 'Basófilos Altos',
+            causes: ['Alergias imediatas (com IgE)', 'Helmintíases', 'Crise blástica em leucemia mielóide crônica'],
+            recomendations: []
+        })
+    }
+
+    //Grandes chances de Problemas Cardio-vasculares
+    if(variablesObject.linfocitos > referenceObj.linfocitos[1][HIGH] ||
+        variablesObject.monocitos > referenceObj.monocito[1][HIGH] ||
+        variablesObject.segmentados > referenceObj.segmentado[1][HIGH] ||
+        variablesObject.bastonetes > referenceObj.bastonete[1][HIGH] ||
+        variablesObject.leucocitos > referenceObj.leucocitos[HIGH]) {
+            possibleDeviations.push({
+                deviation: 'Chances de desenvolver problemas cardio-vasculares',
+                why: 'Linfócitos/Monócitos/Neutrófilos/Leucócitos Altos',
+                causes: [],
+                recomendations: []
+            })
+        }
+    
+    //Presença de Celulas Imaturas
+    if(variablesObject.metamielocitos > 0 || variablesObject.mielocitos > 0 || variablesObject.promielocitos > 0 || variablesObject.blastos > 0) {
+        possibleDeviations.push({
+            deviation: 'Presença de Células Imaturas',
+            why: 'Presença de Metamielócitos/Mielócitos/Promielócitos/Blastos',
+            causes: ['Leucemia (Primeira indicação)', 'Infecções', 'Terapias com fatores de crescimento'],
+            recomendations: []
+        })
+    }
+
+    if(possibleDeviations.length >= 1) {
+        return possibleDeviations
+    } else return false
 }
 
 function analyzePlaquetario(plaquetas, sex) {
@@ -132,18 +264,3 @@ function analyzePlaquetario(plaquetas, sex) {
 function analyzeHistory(patientId) {
     //Pass
 }
-
-//TEST Area
-
-erito = {
-    eritrocitos: 0.0,
-    hemoglobina: 0.0,
-    hematocrito: 0.0,
-    VCM: 0.0,
-    HCM: 0.0,
-    CHCM: 0.0,
-    RDW: 0.0
-}
-
-const res = analyzeEritograma(erito, 'masculino')
-console.log(res)
