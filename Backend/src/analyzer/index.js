@@ -6,14 +6,14 @@ const LOW = 0
 function analyzeEritograma(variablesObject, sex) {
     const referenceObj = (sex == 'masculino') ? references.MaleReferences.eritograma : references.FemaleReferences.eritograma
     var possibleDeviations = []
-    const notes = 'Toda a análise foi feita considerando apenas os valores no eritograma, considerando índice de reticulócitos < 1,5, em hipoproliferativa\n\n' +
+    const notes = 'Toda a análise foi feita considerando apenas os valores no eritograma, considerando índice de reticulócitos < 1.5, em hipoproliferativa. ' +
     'Ácido Fólico (Folato) é utilizado no Brasil para fortificar a farinha, porém o folato "Oculta" os problemas com a B12. Sendo assim, dificilmente se vê o VCM Alto, porém pode ser que tenha algo ali. É sempre bom se precaver'
     
     //Poliglobulia/Policitemia
     if(variablesObject.hemoglobina > referenceObj.hemoglobina[HIGH]) {
         var why = 'Hemoglobina Alta'
-        if(variablesObject.eritrocitos > referenceObj.eritrocitos[HIGH]) why.concat(', Eritrocitos Altos')
-        if(variablesObject.hematocrito > referenceObj.hematocrito[HIGH]) why.concat(', Hematócrito Alto')
+        if(variablesObject.eritrocitos > referenceObj.eritrocitos[HIGH]) why += ', Eritrocitos Altos'
+        if(variablesObject.hematocrito > referenceObj.hematocrito[HIGH]) why += ', Hematócrito Alto'
         possibleDeviations.push({
             deviation: 'Poliglobulia',
             why,
@@ -26,16 +26,16 @@ function analyzeEritograma(variablesObject, sex) {
         var deviation = 'Anemia'
         var why = 'Hemoglobina Baixa'
         if(variablesObject.VCM < referenceObj.vcm[LOW]) {
-            deviation.concat(' Microcítica')
-            why.concat(', VCM Baixo')
+            deviation += ' Microcítica'
+            why += ', VCM Baixo'
         }
         else if(variablesObject.VCM > referenceObj.vcm[HIGH]) {
-            deviation.concat(' Macrocítica')
-            why.concat(', VCM Alto')
+            deviation += ' Macrocítica'
+            why += ', VCM Alto'
         }
         else {
-            deviation.concat(' Normocítica')
-            why.concat(', VCM normal')
+            deviation += ' Normocítica'
+            why += ', VCM normal'
         }
 
         if(deviation == 'Anemia Microcítica') {
@@ -120,19 +120,19 @@ function analyzeLeucograma(variablesObject, sex) {
     }
 
     //Neutrofilia
-    if(variablesObject.segmentados > referenceObj.segmentado[1][HIGH] || variablesObject.bastonetes > referenceObj.bastonete[1][HIGH]) {
+    if(variablesObject.segmentados > referenceObj.segmentado[1][HIGH]) {
         possibleDeviations.push({
             deviation: 'Neutrofilia',
-            why: 'Segmentados/Bastonetes Altos',
+            why: 'Segmentados Altos',
             causes: ['Choro/Pânico na hora da coleta', 'Exercício físico antes da coleta', 'Infecções'],
             recomendations: []
         })
     }
     //Neutropenia
-    else if(variablesObject.segmentados > referenceObj.segmentado[1][LOW] || variablesObject.bastonetes > referenceObj.bastonete[1][LOW]) {
+    else if(variablesObject.segmentados < referenceObj.segmentado[1][LOW]) {
         possibleDeviations.push({
             deviation: 'Neutropenia',
-            why: 'Segmentados/Bastonetes Baixos',
+            why: 'Segmentados Baixos',
             causes: ['Radiação/Quimioterapia'],
             recomendations: []
         })
@@ -263,4 +263,10 @@ function analyzePlaquetario(plaquetas, sex) {
 
 function analyzeHistory(patientId) {
     //Pass
+}
+
+module.exports = {
+    analyzeEritograma,
+    analyzeLeucograma,
+    analyzePlaquetario
 }
