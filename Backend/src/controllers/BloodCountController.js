@@ -1,3 +1,4 @@
+const axios = require('../utils/axios')
 const BloodCount = require('../models/BloodCount')
 const Eritograma = require('../controllers/pseudo-controllers/EritogramaController')
 const Leucograma = require('../controllers/pseudo-controllers/LeucogramaController')
@@ -10,6 +11,7 @@ const bloodCountErrors = new BloodCountErrors()
 const eritogramErrors = new PseudoElements('Eritograma')
 const leucogramErrors = new PseudoElements('Leucograma')
 const plateletErrors = new PseudoElements('Plaquetario')
+const {analyzeEritograma, analyzeLeucograma, analyzePlaquetario} = require('../analyzer')
 
 module.exports = {
     async index(req, res) {
@@ -21,8 +23,9 @@ module.exports = {
         return res.status(200).json(bloodCount)
     },
     async indexSpecific(req, res) {
-        if(!await hasBloodCount(null, req.params.reqNumber)) return res.status(404).json({error: bloodCountErrors.notFound })
-        const id = await getBloodCountId(req.params.reqNumber)
+        const {reqNumber} = req.params
+        if(!await hasBloodCount(null, reqNumber)) return res.status(404).json({error: bloodCountErrors.notFound })
+        const id = await getBloodCountId(reqNumber)
         const bloodCount = await BloodCount.findByPk(id, {
             include: { all: true }
         }).catch(error => {
@@ -440,6 +443,42 @@ module.exports = {
                 else return res.status(400).json({message: plateletErrors.someShitHappened})
             default:
                 return res.status(400).json({error: 'Invalid Option to Delete'})
+        }
+    },
+    async analyze(req, res) {
+        const {reqNumber, type} = req.params
+        var bloodCount
+        await axios.get(`/bloodCount/${reqNumber}`).then(response => {
+            bloodCount = response.data
+        }).catch(err => {
+            err = err.toString()
+            if(err.substring(err.length - 3, err.length) == '404') return res.status(404).json({ error: bloodCountErrors.notFound })
+            else return res.status(400).json({ error: bloodCountErrors.errorAtController(err) })
+        })
+        const sex = (bloodCount.patient.sex).toLowerCase()
+        var analysis = []
+        if(type == 'eritograma') analyzeErito()
+        else if(type == 'leucograma') analyzeLeuco()
+        else if(type == 'plaquetario') analyzePlaqueta()
+        else if(type == 'completo') {
+            analyzeErito()
+            analyzeLeuco()
+            analyzePlaqueta()
+        }
+        else return res.status(400).json({error: `type: ${type} is not a function. Available types: eritograma; leucograma; plaquetario; completo`})
+        return res.status(200).json(analysis)
+
+        function analyzeErito() {
+            if(bloodCount.eritograma == null) analysis.push({eritogramaError: eritogramErrors.notFound})
+            else analysis.push(analyzeEritograma(bloodCount.eritograma, sex))
+        }
+        function analyzeLeuco() {
+            if(bloodCount.leucograma == null) analysis.push({leucogramaError: leucogramErrors.notFound})
+            else analysis.push(analyzeLeucograma(bloodCount.leucograma, sex))
+        }
+        function analyzePlaqueta() {
+            if(bloodCount.plaquetario == null) analysis.push({plaquetarioError: plateletErrors.notFound})
+            else analysis.push(analyzePlaquetario(bloodCount.plaquetario.plaquetas, sex))
         }
     }
 }

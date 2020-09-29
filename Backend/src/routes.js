@@ -25,6 +25,7 @@ router.post('/bloodCount/:type', BloodCountController.store)
 router.post('/bloodCount/:reqNumber/:type', BloodCountController.append)
 router.get('/bloodCounts', BloodCountController.index)
 router.get('/bloodCount/:reqNumber', BloodCountController.indexSpecific)
+router.get('/bloodCount/:reqNumber/:type/analyze', BloodCountController.analyze)
 router.put('/bloodCount/:reqNumber/:type', BloodCountController.update)
 router.delete('/bloodCount/:reqNumber/:type', BloodCountController.delete)
 
