@@ -1,19 +1,32 @@
 const axios = require('../utils/axios')
+
 const BloodCount = require('../models/BloodCount')
 const Eritograma = require('../controllers/pseudo-controllers/EritogramaController')
 const Leucograma = require('../controllers/pseudo-controllers/LeucogramaController')
 const Plaquetario = require('../controllers/pseudo-controllers/PlaquetarioController')
+
 const { hasBloodCount, hasEritograma, hasLeucograma, hasPlaquetario } = require('../utils/hasRegister')
 const { createBloodCountId } = require('../utils/createHashes')
 const { getBloodCountId, getPatientId } = require('../utils/getIds')
+
 const { BloodCountErrors, PseudoElements } = require('../utils/errorTexts')
 const bloodCountErrors = new BloodCountErrors()
 const eritogramErrors = new PseudoElements('Eritograma')
 const leucogramErrors = new PseudoElements('Leucograma')
 const plateletErrors = new PseudoElements('Plaquetario')
+
 const {analyzeEritograma, analyzeLeucograma, analyzePlaquetario} = require('../analyzer')
 
 module.exports = {
+
+    /**
+     * Select all the blood counts registers
+     * 
+     * @function index
+     * @param {any} req Express/Router/Request
+     * @param {any} res Express/Router/Response
+     * @returns {any} JSON - Response
+    */
     async index(req, res) {
         const bloodCount = await BloodCount.findAll({
             include: { all: true },
@@ -22,6 +35,15 @@ module.exports = {
         })
         return res.status(200).json(bloodCount)
     },
+
+    /**
+     * Select a specific blood count register
+     * 
+     * @function indexSpecific
+     * @param {any} req Express/Router/Request
+     * @param {any} res Express/Router/Response
+     * @returns {any} JSON - Response
+    */
     async indexSpecific(req, res) {
         const {reqNumber} = req.params
         if(!await hasBloodCount(null, reqNumber)) return res.status(404).json({error: bloodCountErrors.notFound })
@@ -33,6 +55,15 @@ module.exports = {
         })
         return res.status(200).json(bloodCount)
     },
+
+    /**
+     * Stores a specific blood count
+     * 
+     * @function store
+     * @param {any} req Express/Router/Request
+     * @param {any} res Express/Router/Response
+     * @returns {any} JSON - Response
+    */
     async store(req, res) {
         const altType = req.params.type
         const type = altType.toLowerCase()
@@ -174,6 +205,15 @@ module.exports = {
                 return res.status(400).json({error: 'Invalid Option to Store'})
         }
     },
+
+    /**
+     * Updates the specific blood count
+     * 
+     * @function update
+     * @param {any} req Express/Router/Request
+     * @param {any} res Express/Router/Response
+     * @returns {any} JSON - Response
+    */
     async update(req, res) {
         const altType = req.params.type
         const type = altType.toLowerCase()
@@ -310,6 +350,15 @@ module.exports = {
                 return res.status(400).json({error: 'Invalid Option to Update'})
         }
     },
+
+    /**
+     * append a new exam to an existing blood count
+     * 
+     * @function append
+     * @param {any} req Express/Router/Request
+     * @param {any} res Express/Router/Response
+     * @returns {any} JSON - Response
+    */
     async append(req, res) {
         const altType = req.params.type
         const type = altType.toLowerCase()
@@ -408,6 +457,15 @@ module.exports = {
                 return res.status(400).json({error: 'Invalid Option to Store'})
         }
     },
+
+    /**
+     * Deletes a specific blood count
+     * 
+     * @function delete
+     * @param {any} req Express/Router/Request
+     * @param {any} res Express/Router/Response
+     * @returns {any} JSON - Response
+    */
     async delete(req, res) {
         const altType = req.params.type
         const type = altType.toLowerCase()
@@ -445,6 +503,15 @@ module.exports = {
                 return res.status(400).json({error: 'Invalid Option to Delete'})
         }
     },
+
+    /**
+     * Analyzes a specific blood count
+     * 
+     * @function analyze
+     * @param {any} req Express/Router/Request
+     * @param {any} res Express/Router/Response
+     * @returns {any} JSON - Response
+    */
     async analyze(req, res) {
         const {reqNumber, type} = req.params
         var bloodCount

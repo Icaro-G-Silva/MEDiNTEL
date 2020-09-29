@@ -1,5 +1,6 @@
 const {Router} = require('express')
 const router = Router()
+
 const PatientController = require('./controllers/PatientController')
 const DoctorController = require('./controllers/DoctorController')
 const BloodCountController = require('./controllers/BloodCountController')
