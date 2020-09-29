@@ -261,10 +261,6 @@ function analyzePlaquetario(plaquetas, sex) {
     return possibleDeviations
 }
 
-function analyzeHistory(patientId) {
-    //Pass
-}
-
 module.exports = {
     analyzeEritograma,
     analyzeLeucograma,
