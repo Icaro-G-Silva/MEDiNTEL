@@ -1,11 +1,21 @@
 const LeucogramaModel = require('../../models/Leucograma')
+
 const {createLeucogramaId} = require('../../utils/createHashes')
 const {verifyBloodDatasInputs} = require('../../utils/verifyBloodDatasInputs')
 const { hasLeucogramaIn } = require('../../utils/hasChildIn')
+
 const { PseudoElements } = require('../../utils/errorTexts')
 const leucogramErrors = new PseudoElements('Leucograma')
 
 class Leucograma {
+
+    /**
+     * Constructor from 'Leucograma'
+     * 
+     * @function constructor
+     * @param {String} bloodCountId The ID
+     * @param {Object} datas The object data to leucograma
+    */
     constructor(bloodCountId = null, datas = {}) {
         if(!verifyBloodDatasInputs(bloodCountId, datas)) throw new Error(leucogramErrors.dataObjectNotFit)
         this.id = bloodCountId
@@ -24,6 +34,12 @@ class Leucograma {
         this.plasmocito = datas['plasmocito']
     }
 
+    /**
+     * Stores a Leucograma
+     * 
+     * @function store
+     * @returns {Boolean} True if alright
+    */
     async store() {
         if(await hasLeucogramaIn(this.id)) return leucogramErrors.isAlreadyRegistered
         const id = await createLeucogramaId()
@@ -49,6 +65,12 @@ class Leucograma {
         return true
     }
 
+    /**
+     * Updates a specific Leucograma
+     * 
+     * @function update
+     * @returns {Boolean} True if alright
+    */
     async update() {
         if(!await hasLeucogramaIn(this.id)) return leucogramErrors.anyXRegistered
         const leucograma = await LeucogramaModel.update({
@@ -74,6 +96,12 @@ class Leucograma {
         return true
     }
 
+    /**
+     * Delete a specific Leucograma
+     * 
+     * @function delete
+     * @returns {Boolean} True if alright
+    */
     static async delete(bloodCountId = null) {
         if(bloodCountId === null) throw new Error(leucogramErrors.bloodCountNotFit)
         const leucograma = await LeucogramaModel.destroy({where:{bloodCountId}}).catch(error =>{

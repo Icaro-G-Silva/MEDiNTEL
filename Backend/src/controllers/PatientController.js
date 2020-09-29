@@ -1,16 +1,28 @@
 const Patient = require('../models/Patient')
 const BloodCount = require('../models/BloodCount')
+
 const { validateDocument } = require('../utils/verifyCPF')
 const { verifyCRM } = require('../utils/verifyCRM')
 const { hasDoctor, hasPatient } = require('../utils/hasRegister')
 const { getDoctorId, getPatientId } = require('../utils/getIds')
 const { createPatientId, createHash } = require('../utils/createHashes')
+
 const auth = require('../utils/authentication')
+
 const { PatientErrors, DoctorErrors } = require('../utils/errorTexts')
 const patientErrors = new PatientErrors()
 const doctorErrors = new DoctorErrors()
 
 module.exports = {
+
+    /**
+     * Select all Patients
+     * 
+     * @function index
+     * @param {any} req Express/Router/Request
+     * @param {any} res Express/Router/Response
+     * @returns {any} JSON - Response
+    */
     async index(req, res) {
         const patients = await Patient.findAll({
             include: { association: 'doctor' }
@@ -19,6 +31,15 @@ module.exports = {
         })
         return res.status(200).json(patients)
     },
+
+    /**
+     * Select a specific patient
+     * 
+     * @function indexSpecific
+     * @param {any} req Express/Router/Request
+     * @param {any} res Express/Router/Response
+     * @returns {any} JSON - Response
+    */
     async indexSpecific(req, res) {
         const id = await getPatientId(parseInt(req.params.rp))
         if(!await hasPatient(id)) return res.status(404).json({error: patientErrors.notFound})
@@ -31,6 +52,15 @@ module.exports = {
         if(patient) return res.status(200).json(patient)
         else return res.status(404).json({error: patientErrors.notFound})
     },
+
+    /**
+     * Select the related patient's doctor
+     * 
+     * @function indexDoctor
+     * @param {any} req Express/Router/Request
+     * @param {any} res Express/Router/Response
+     * @returns {any} JSON - Response
+    */
     async indexDoctor(req, res) {
         const id = await getPatientId(parseInt(req.params.rp))
         if(!await hasPatient(id)) return res.status(404).json({error: patientErrors.notFound})
@@ -43,6 +73,15 @@ module.exports = {
         if(patients) return res.status(200).json(patients.doctor)
         else return res.status(404).json({error: patientErrors.notFound})
     },
+
+    /**
+     * Stores patient
+     * 
+     * @function store
+     * @param {any} req Express/Router/Request
+     * @param {any} res Express/Router/Response
+     * @returns {any} JSON - Response
+    */
     async store(req, res) {
         const { doctorCRM } = req.body
         const { rp, name, surname, idDocument, birth, sex, login, password, accessLevel } = req.body
@@ -81,6 +120,15 @@ module.exports = {
         const token = auth.sign({id, accessLevel})
         return res.status(200).json({patient, token})
     },
+
+    /**
+     * Updates a specific patient
+     * 
+     * @function update
+     * @param {any} req Express/Router/Request
+     * @param {any} res Express/Router/Response
+     * @returns {any} JSON - Response
+    */
     async update(req, res) {
         const { rp, name, surname, idDocument, birth, sex, login, password, accessLevel, doctorCRM } = req.body
 
@@ -118,6 +166,15 @@ module.exports = {
         })
         return res.status(200).json({ message: 'Updated Successfully' })
     },
+
+    /**
+     * Delete a specific patient
+     * 
+     * @function index
+     * @param {any} req Express/Router/Request
+     * @param {any} res Express/Router/Response
+     * @returns {any} JSON - Response
+    */
     async delete(req, res) {
         const id = await getPatientId(parseInt(req.params.rp))
         if(!await hasPatient(id)) return res.status(404).json({error: patientErrors.notFound})
@@ -127,6 +184,15 @@ module.exports = {
         })
         return res.status(200).json({ message: 'Deleted Successfully' })
     },
+
+    /**
+     * Select the related patient's blood count
+     * 
+     * @function indexSpecificBloodCount
+     * @param {any} req Express/Router/Request
+     * @param {any} res Express/Router/Response
+     * @returns {any} JSON - Response
+    */
     async indexSpecificBloodCount(req, res) {
         const id = await getPatientId(parseInt(req.params.rp))
         if(!await hasPatient(id)) return res.status(404).json({error: patientErrors.notFound})

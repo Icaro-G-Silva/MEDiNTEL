@@ -1,11 +1,23 @@
 const Doctor = require('../models/Doctor')
 const Patient = require('../models/Patient')
+
 const auth = require('../utils/authentication')
+
 const { validateHash } = require('../utils/createHashes')
+
 const { AuthErrors } = require('../utils/errorTexts')
 const authErrors = new AuthErrors()
 
 module.exports = {
+
+    /**
+     * Do the Login
+     * 
+     * @function login
+     * @param {any} req Express/Router/Request
+     * @param {any} res Express/Router/Response
+     * @returns {any} JSON - Response (Token)
+    */
     async login(req, res) {
         const [, hash] = req.headers.authorization.split(' ')
         const [login, password] = Buffer.from(hash, 'base64').toString().split(':')
@@ -29,6 +41,15 @@ module.exports = {
             res.status(400).json({error: authErrors.errorAtController(error)})
         }
     },
+
+    /**
+     * Verify a token
+     * 
+     * @function verifyToken
+     * @param {any} req Express/Router/Request
+     * @param {any} res Express/Router/Response
+     * @returns {any} JSON - Response
+    */
     async verifyToken(req, res) {
         const token = req.params.token
         try {

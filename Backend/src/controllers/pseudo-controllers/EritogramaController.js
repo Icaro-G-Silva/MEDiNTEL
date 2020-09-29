@@ -1,11 +1,21 @@
 const EritogramaModel = require('../../models/Eritograma')
+
 const {createEritogramaId} = require('../../utils/createHashes')
 const {verifyBloodDatasInputs} = require('../../utils/verifyBloodDatasInputs')
 const { hasEritogramaIn } = require('../../utils/hasChildIn')
+
 const { PseudoElements } = require('../../utils/errorTexts')
 const eritogramErrors = new PseudoElements('Eritograma')
 
 class Eritograma {
+
+    /**
+     * Constructor from 'Eritograma'
+     * 
+     * @function constructor
+     * @param {String} bloodCountId The ID
+     * @param {Object} datas The object data to eritograma
+    */
     constructor(bloodCountId = null, datas = {}) {
         if(!verifyBloodDatasInputs(bloodCountId, datas)) throw new Error(eritogramErrors.dataObjectNotFit)
         this.id = bloodCountId
@@ -18,6 +28,12 @@ class Eritograma {
         this.RDW = datas['RDW']
     }
 
+    /**
+     * Stores a Eritograma
+     * 
+     * @function store
+     * @returns {Boolean} True if alright
+    */
     async store() {
         if(await hasEritogramaIn(this.id)) return eritogramErrors.isAlreadyRegistered
         const id = await createEritogramaId()
@@ -37,6 +53,12 @@ class Eritograma {
         return true
     }
 
+    /**
+     * Updates a specific Eritograma
+     * 
+     * @function update
+     * @returns {Boolean} True if alright
+    */
     async update() {
         if(!await hasEritogramaIn(this.id))  return eritogramErrors.anyXRegistered
         const eritograma = await EritogramaModel.update({
@@ -56,6 +78,12 @@ class Eritograma {
         return true
     }
 
+    /**
+     * Delete a specific Eritograma
+     * 
+     * @function delete
+     * @returns {Boolean} True if alright
+    */
     static async delete(bloodCountId = null) {
         if(bloodCountId === null) throw new Error(eritogramErrors.bloodCountNotFit)
         const eritograma = await EritogramaModel.destroy({where:{bloodCountId}}).catch(error =>{

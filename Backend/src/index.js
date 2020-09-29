@@ -1,8 +1,8 @@
 try {
     const Express = require('express')
+    const app = Express()
     const routes = require('./routes')
     const serverConfig = require('./configs/serverConfig')
-    const app = Express()
 
     require('./database')
 
@@ -16,4 +16,3 @@ try {
 } catch (error) {
     console.error(`General error catched! -> ${error}`)
 }
-
