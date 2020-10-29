@@ -43,6 +43,39 @@ module.exports = {
     },
 
     /**
+     * Do the Login via Post
+     * 
+     * @function loginPost
+     * @param {any} req Express/Router/Request
+     * @param {any} res Express/Router/Response
+     * @returns {any} JSON - Response (Token)
+    */
+   async loginPost(req, res) {
+        const {login, password} = req.body
+        try {
+            const relatedDoctor = await Doctor.findOne({where: {login}})
+            if(relatedDoctor) {
+                if(await validateHash(relatedDoctor.get('password'), password)) {
+                    const token = auth.sign({id: relatedDoctor.get('id'), accessLevel: relatedDoctor.get('accessLevel'), crm: relatedDoctor.get('crm')})
+                    res.status(200).json(token)
+                }
+            }
+            const relatedPatient = await Patient.findOne({where: {login}})
+            if(relatedPatient) {
+                if(await validateHash(relatedPatient.get('password'), password)) {
+                    const token = auth.sign({id: relatedPatient.get('id'), accessLevel: relatedPatient.get('accessLevel'), rp: relatedPatient.get('rp')})
+                    res.status(200).json(token)
+                }
+            }
+            res.status(401).json({error: authErrors.unauthorized('Login or Password incorrect')})
+        } catch (error) {
+            res.status(400).json({error: authErrors.errorAtController(error)})
+        }
+    },
+
+
+
+    /**
      * Verify a token
      * 
      * @function verifyToken

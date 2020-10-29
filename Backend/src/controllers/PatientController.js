@@ -117,7 +117,7 @@ module.exports = {
         }).catch(error =>{
             return res.status(400).json({ error: patientErrors.errorAtController(error) })
         })
-        const token = auth.sign({id, accessLevel})
+        const token = auth.sign({id, accessLevel, rp})
         return res.status(200).json({patient, token})
     },
 
@@ -130,12 +130,11 @@ module.exports = {
      * @returns {any} JSON - Response
     */
     async update(req, res) {
-        const { rp, name, surname, idDocument, birth, sex, login, password, accessLevel, doctorCRM } = req.body
+        const { rp, name, surname, idDocument, birth, sex, accessLevel, doctorCRM } = req.body
 
-        const id = await getPatientId(parseInt(req.params.rp))
+        const id = await getPatientId((typeof req.params.rp == 'string') ? parseInt(req.params.rp) : req.params.rp)
         if(!await hasPatient(id)) return res.status(404).json({error: patientErrors.notFound})
         if(!validateDocument(idDocument)) return res.status(400).json({error: patientErrors.invalidDocument})
-        if(await hasDoctor(null, null, login)) return res.status(400).json({error: patientErrors.login.isAlreadyRegistered})
 
         if(doctorCRM !== null) {
             if(!await verifyCRM(doctorCRM)) res.status(400).json({error: doctorErrors.invalidCRM})
@@ -146,8 +145,6 @@ module.exports = {
         }
         else var doctorId = null
 
-        const passwordHashed = await createHash(password)
-
         const patient = await Patient.update({
             rp,
             name,
@@ -155,8 +152,6 @@ module.exports = {
             idDocument,
             birth,
             sex,
-            login,
-            password: passwordHashed,
             accessLevel,
             doctorId
         }, {
@@ -164,7 +159,8 @@ module.exports = {
         }).catch(error =>{
             return res.status(400).json({ error: patientErrors.errorAtController(error) })
         })
-        return res.status(200).json({ message: 'Updated Successfully' })
+        const token = auth.sign({id, accessLevel, rp})
+        return res.status(200).json({ message: 'Updated Successfully', token })
     },
 
     /**

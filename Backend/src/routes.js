@@ -31,6 +31,7 @@ router.put('/bloodCount/:reqNumber/:type', BloodCountController.update)
 router.delete('/bloodCount/:reqNumber/:type', BloodCountController.delete)
 
 router.get('/login', AuthController.login)
+router.post('/login', AuthController.loginPost)
 router.get('/token/:token/verify', AuthController.verifyToken)
 
 router.get('/', (req, res) => {

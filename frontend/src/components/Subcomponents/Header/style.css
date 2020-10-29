@@ -1,0 +1,42 @@
+.headerContainer {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    min-height: 80px;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 2px dashed #3131317c;
+}
+
+.headerContent {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.headerInteractions {
+    background-color: #5ea2fce7;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 7px;
+}
+
+.headerInteractions:hover {
+    cursor: pointer;
+    background-color: #23579cd0;
+}
+
+.headerLogoutIcon {
+    min-width: 45px;
+}
+
+.logoff {
+    margin-right: 35px;
+}
+
+.logoff:hover {
+    cursor: pointer;
+    opacity: .5;
+}

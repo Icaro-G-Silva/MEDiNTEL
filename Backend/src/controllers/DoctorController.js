@@ -104,7 +104,7 @@ module.exports = {
         }).catch(error =>{
             return res.status(400).json({ error: doctorErrors.errorAtController(error) })
         })
-        const token = auth.sign({id, accessLevel})
+        const token = auth.sign({id, accessLevel, crm})
         return res.status(200).json({doctor, token})
     },
 
@@ -117,7 +117,7 @@ module.exports = {
      * @returns {any} JSON - Response
     */
     async update(req, res) {
-        const { crm, name, surname, idDocument, birth, sex, login, password, accessLevel } = req.body
+        const { crm, name, surname, idDocument, birth, sex, accessLevel } = req.body
 
         if(!await verifyCRM(crm) || crm === null) res.status(400).json({error: doctorErrors.invalidCRM})
 
@@ -126,13 +126,10 @@ module.exports = {
         const id = await getDoctorId(req.params.crm)
 
         if(!validateDocument(idDocument)) return res.status(400).json({error: doctorErrors.invalidDocument})
-        if(await hasPatient(null, null, login)) return res.status(400).json({error: doctorErrors.login.isAlreadyRegistered})
 
         if(req.params.crm !== crmSliced) {
             if(await hasDoctor(null, crmSliced)) return res.status(400).json({error: doctorErrors.isAlreadyRegistered})
         }
-
-        const passwordHashed = await createHash(password)
 
         const doctor = await Doctor.update({
             crm: crmSliced,
@@ -141,15 +138,14 @@ module.exports = {
             idDocument,
             birth,
             sex,
-            login,
-            password: passwordHashed,
             accessLevel
         }, {
             where: {id}
         }).catch(error =>{
             return res.status(400).json({ error: doctorErrors.errorAtController(error) })
         })
-        return res.status(200).json({ message: 'Updated Successfully' })
+        const token = auth.sign({id, accessLevel, crm})
+        return res.status(200).json({ message: 'Updated Successfully', token })
     },
 
     /**
