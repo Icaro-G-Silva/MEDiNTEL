@@ -1,0 +1,15 @@
+.cardsPlace {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.textLine {
+    font-size: 1.4em;
+    font-weight: 350;
+}
+
+.textContrast {
+    font-weight: 400;
+}

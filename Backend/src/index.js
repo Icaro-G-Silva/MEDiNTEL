@@ -3,9 +3,11 @@ try {
     const app = Express()
     const routes = require('./routes')
     const serverConfig = require('./configs/serverConfig')
+    const cors = require('cors')
 
     require('./database')
 
+    app.use(cors())
     app.use(Express.urlencoded({ extended: false }))
     app.use(Express.json())
     app.use(routes)
