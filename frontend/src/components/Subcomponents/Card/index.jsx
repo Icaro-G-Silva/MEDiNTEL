@@ -2,11 +2,11 @@ import React, {useState, useEffect} from 'react'
 import {Link} from 'react-router-dom'
 
 import './style.css'
+import TrashCan from '../../../Assets/trashcan.png'
 
 export default props => {
 
     const [reqNumber, setReqNumber] = useState('')
-
     useEffect(()=>{
         if(props.reqNumber !== undefined) setReqNumber(props.reqNumber)
     }, [])
@@ -20,7 +20,7 @@ export default props => {
             <div className="header">
                 <h1 className="title">{props.title}</h1>
                 <Link className="link" to="#" onClick={deleteRegister}>
-                    <div className="deleteButton"><img className="trashCan" src="./Assets/trashcan.png" alt="TrashCan"/></div>
+                    <div className="deleteButton"><img className="trashCan" src={TrashCan} alt="TrashCan"/></div>
                 </Link>
             </div>
             <div className="content">

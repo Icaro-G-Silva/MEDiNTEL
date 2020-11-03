@@ -46,7 +46,7 @@ export default () => {
 
     return (
         <React.Fragment>
-            <Header name={name} description="Abaixo estão os hemogramas de seu Paciente" redirect="/register/bloodCount" linkName="+ Novo Hemograma" comeBack={true}/>
+            <Header name={name} description="Abaixo estão os hemogramas de seu Paciente" redirect="/bloodCount" linkName="+ Novo Hemograma" comeBack={true}/>
             <PatientMain rp={rp} />
         </React.Fragment>
     )

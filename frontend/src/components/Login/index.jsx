@@ -6,6 +6,7 @@ import {Context} from '../../utils/Context'
 import API from '../../utils/API'
 
 import './style.css'
+import logoMEDiNTEL from '../../Assets/LogoTCC.png'
 
 export default () => {
 
@@ -14,6 +15,8 @@ export default () => {
 
     const [user, setUser] = useState('')
     const [password, setPassword] = useState('')
+
+    document.body.onkeypress = (e) => {if(e.key === 'Enter') login()}
 
     const inputError = (where) => {
         alert(`Você não preencheu o campo "${where}". Por favor, preencha`)
@@ -55,7 +58,7 @@ export default () => {
         <React.Fragment>
             <form className="centered">
                 <div className="centered">
-                    <img src="./Assets/LogoTCC.png" alt="Logotipo MEDiNTEL"/>
+                    <img src={logoMEDiNTEL} alt="Logotipo MEDiNTEL"/>
                     <h1>Bem-vindos ao <span>MEDiNTEL</span></h1>
                 </div>
                 <Input name="user" title="Usuário" setValue={setUser} value={user}/>

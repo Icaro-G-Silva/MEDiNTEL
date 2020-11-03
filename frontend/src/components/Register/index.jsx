@@ -5,6 +5,7 @@ import Input from '../Subcomponents/Input'
 import ComboBox from '../Subcomponents/ComboBox'
 
 import './style.css'
+import logoMEDiNTEL from '../../Assets/LogoTCC.png'
 import API from '../../utils/API'
 import { Context } from '../../utils/Context'
 
@@ -104,7 +105,7 @@ export default () => {
         <React.Fragment>
             <form className="centered">
                 <div className="centered">
-                    <img src="./Assets/LogoTCC.png" alt="Logotipo MEDiNTEL"/>
+                    <img src={logoMEDiNTEL} alt="Logotipo MEDiNTEL"/>
                     <h1>Cadastro no <span>MEDiNTEL</span></h1>
                 </div>
                 <div className="centered-row">

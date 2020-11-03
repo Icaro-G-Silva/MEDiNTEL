@@ -14,6 +14,7 @@ export default props => {
     const history = useHistory()
 
     const [name, setName] = useState('')
+    const [rp, setRp] = useState('')
     const [bloodCounts, setBloodCounts] = useState([])
     const [updateInfos, setUpdateInfos] = useState(true)
 
@@ -41,6 +42,7 @@ export default props => {
             }).catch(err => {
                 alert(`Erro -> ${err}`)
             })
+            setRp(realRp)
         } catch (err) {
             alert(`Algo deu errado -> ${err}`)
         }
@@ -90,19 +92,19 @@ export default props => {
 
     return (
         <React.Fragment>
-            {(props.rp) ? '' : <Header name={name} description="Abaixo estão seus Hemogramas" redirect="/register/bloodCount" linkName="+ Novo Hemograma"/>}
+            {(props.rp) ? '' : <Header name={name} description="Abaixo estão seus Hemogramas" redirect="/bloodCount" linkName="+ Novo Hemograma"/>}
             <div className="cardsPlace">
                 {
                 (bloodCounts.length === 0) ? 
                     <div className="centered">
-                        <h2>Você não tem nenhum Hemograma cadastrado ainda.</h2> <br/>
+                        <h2>Não há nenhum Hemograma cadastrado ainda.</h2> <br/>
                         <h1>¯\_(ツ)_/¯</h1>
                     </div>
                 :
                 bloodCounts.map(bloodCount => {
                     const title = getTitle(bloodCount.eritograma, bloodCount.leucograma, bloodCount.plaquetario)
                     return (
-                        <Link to={`/bloodCount/${bloodCount.requestNumber}`} className="withoutStyleLink">
+                        <Link to={`/bloodCount/${rp}/${bloodCount.requestNumber}`} className="withoutStyleLink">
                             <Card key={bloodCount.requestNumber} reqNumber={bloodCount.requestNumber} title={title} deleteTrigger={deleteRegister}>
                                 <h2 className="textLine"><label className="textContrast">Pedido:</label> {bloodCount.requestNumber}</h2>
                                 <h2 className="textLine"><label className="textContrast">Prontuário:</label> {bloodCount.medicalRecord}</h2>

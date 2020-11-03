@@ -527,7 +527,7 @@ module.exports = {
         if(type == 'eritograma') analyzeErito()
         else if(type == 'leucograma') analyzeLeuco()
         else if(type == 'plaquetario') analyzePlaqueta()
-        else if(type == 'completo') {
+        else if(type == 'complete') {
             analyzeErito()
             analyzeLeuco()
             analyzePlaqueta()

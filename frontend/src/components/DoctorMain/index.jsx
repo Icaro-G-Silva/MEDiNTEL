@@ -90,7 +90,7 @@ export default () => {
 
     return (
         <React.Fragment>
-            <Header name={name} description="Abaixo estão seus Pacientes" redirect="/analyze" linkName="Pré-Análise"/>
+            <Header name={name} description="Abaixo estão seus Pacientes" disableLink={true}/>
             <div className="cardsPlace">
                 {
                     (patients.length === 0) ? 

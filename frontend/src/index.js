@@ -8,6 +8,8 @@ import Register from './components/Register'
 import Main from './components/Main'
 import UserUpdate from './components/UserUpdate'
 import DoctorPatientView from './components/DoctorPatientView'
+import BloodCountManipulation from './components/BloodCountManipulation'
+import Analyzed from './components/Analyzed'
 
 import './style.css'
 
@@ -21,6 +23,8 @@ RenderPage(
           <Route path="/main"><Main/></Route>
           <Route path="/update/user"><UserUpdate/></Route>
           <Route path="/patient/:rp"><DoctorPatientView/></Route>
+          <Route path="/bloodCount/:relatedPatient/:reqNumber"><BloodCountManipulation/></Route>
+          <Route path="/analyze/:relatedPatient/:reqNumber"><Analyzed/></Route>
         </Switch>
       </Router>
     </ContextComponent>
