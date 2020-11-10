@@ -226,11 +226,11 @@ export default () => {
                 </div>
                 <div className="centered-row">
                     <Input name="collectionDate" title="Data da Coleta" type="date" setValue={setCollectionDate} value={collectionDate}/>
-                    <Input name="collectionHour" title="Hora da Coleta" type="date" setValue={setCollectionHour} value={collectionHour}/>
+                    <Input name="collectionHour" title="Hora da Coleta" setValue={setCollectionHour} value={collectionHour}/>
                 </div>
                 <div className="centered-row">
                     <Input name="releasedAtDate" title="Data do resultado" type="date" setValue={setReleasedAtDate} value={releasedAtDate}/>
-                    <Input name="releasedAtHour" title="Hora do resultado" type="date" setValue={setReleasedAtHour} value={releasedAtHour}/>
+                    <Input name="releasedAtHour" title="Hora do resultado" setValue={setReleasedAtHour} value={releasedAtHour}/>
                 </div>
                 <div className="centered-row">
                     <Input classInjection="long" name="automation" title="Automação" setValue={setAutomation} value={automation}/>

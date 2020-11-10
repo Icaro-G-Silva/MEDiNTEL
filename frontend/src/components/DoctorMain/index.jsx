@@ -106,7 +106,6 @@ export default () => {
                                 <Card key={patient.rp} reqNumber={patient.rp} title={`${patient.name} ${patient.surname}`} deleteTrigger={deleteRegister}>
                                     <h2 className="textLine"><label className="textContrast">Reg. Paciente:</label> {patient.rp}</h2>
                                     <h2 className="textLine"><label className="textContrast">Nascimento:</label> {patient.birth}</h2>
-                                    <h2 className="textLine"><label className="textContrast">Hemogramas:</label> {bloodCountAmount}</h2>
                                 </Card>
                             </Link>
                         )

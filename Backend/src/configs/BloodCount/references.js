@@ -25,11 +25,11 @@ module.exports = {
             metamielocito: [[null, null],[null, null]],      // % || thousand/mm³
             bastonete: [[48.0, 71.5],[0.0, 1.0]],            // % || thousand/mm³
             segmentado: [[48.0, 71.5],[0.0, 1.0]],           // % || thousand/mm³
-            eosinofilo: [[0.0, 5.0],[0.0, 1.0]],           // % || thousand/mm³
-            basofilo: [[0.0, 3.0],[0.0, 1.0]],             // % || thousand/mm³
+            eosinofilo: [[0.0, 5.0],[0.0, 1.0]],             // % || thousand/mm³
+            basofilo: [[0.0, 3.0],[0.0, 1.0]],               // % || thousand/mm³
             linfocitos: [[19.0, 50.0],[0.0, 1.0]],           // % || thousand/mm³
             linfocitosAtipico: [[null, null],[null, null]],  // % || thousand/mm³
-            monocito: [[2.0, 12.0],[0.0, 1.0]],             // % || thousand/mm³
+            monocito: [[2.0, 12.0],[0.0, 1.0]],              // % || thousand/mm³
             plasmocito: [[null, null],[null, null]],         // % || thousand/mm³
         },
         plaquetario: {
