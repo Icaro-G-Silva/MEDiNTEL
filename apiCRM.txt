@@ -1,1 +1,0 @@
-https://www.consultacrm.com.br/api/index.php?tipo=crm&uf=&q=NUMEROCRM&chave=5723461945&destino=json
